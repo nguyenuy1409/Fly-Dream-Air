@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlyDreamAir — Your Dream Journey Starts Here</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<!-- shared navbar template — copied across pages so each page has its own sticky nav -->
+<!-- the active class on the link changes per page -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 1 — HOME
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page1" class="page active">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+      </svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a class="active" onclick="showPage(1)">Home</a></li>
+      <li><a onclick="showPage(1)">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item" onclick="showPage(7)">
+              <div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Meals & Dining</div>
+                <div class="dropdown-item-desc">Pre-order your in-flight meal from our chef-crafted menus</div>
+              </div>
+            </a>
+            <a class="dropdown-item" onclick="showPage(7)">
+              <div class="dropdown-item-icon" style="background:rgba(255,193,7,.12);">🥂</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Food & Drinks</div>
+                <div class="dropdown-item-desc">Browse cocktails, wines, soft drinks & snacks</div>
+              </div>
+            </a>
+            <a class="dropdown-item" onclick="showPage(7)">
+              <div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Entertainment</div>
+                <div class="dropdown-item-desc">300+ movies, live TV, music & games on your personal screen</div>
+              </div>
+            </a>
+            <a class="dropdown-item" onclick="showPage(7)">
+              <div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">WiFi & Connectivity</div>
+                <div class="dropdown-item-desc">High-speed plans from $9.99 — stay connected at 35,000 ft</div>
+              </div>
+            </a>
+            <a class="dropdown-item" onclick="showPage(7)">
+              <div class="dropdown-item-icon" style="background:rgba(139,92,246,.12);">🛍️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Duty Free Shopping</div>
+                <div class="dropdown-item-desc">Exclusive fragrances, luxury goods & gifts delivered to your seat</div>
+              </div>
+            </a>
+            <a class="dropdown-item" onclick="showPage(7)">
+              <div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Comfort & Amenities</div>
+                <div class="dropdown-item-desc">Pillows, blankets, noise-cancelling headsets & premium kits</div>
+              </div>
+            </a>
+          </div>
+          <div class="dropdown-promo">
+            <div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals up to 48 hrs before departure & save 15%</div>
+            <button class="dropdown-promo-btn" onclick="showPage(7)">Order Now</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Hero section with search widget -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-sunset"></div>
+    <div class="hero-inner">
+      <h1 class="hero-headline">Your <span>Dream Journey</span><br>Starts Here</h1>
+      <p class="hero-sub">Book flights, choose your seat, and enjoy premium in-flight experiences</p>
+
+      <!-- Search Widget -->
+      <div class="search-widget">
+        <div class="trip-tabs">
+          <button class="trip-tab active" onclick="setTab(this)">Round-trip</button>
+          <button class="trip-tab" onclick="setTab(this)">One-way</button>
+          <button class="trip-tab" onclick="setTab(this)">Multi-city</button>
+        </div>
+        <div class="search-form">
+
+          <!-- FROM -->
+          <div class="search-field">
+            <label>From</label>
+            <input type="text" id="from-input" value="Sydney (SYD)" autocomplete="off"
+              placeholder="City or airport"
+              oninput="filterAirports(this,'from-drop')"
+              onfocus="openAirportDrop('from-drop',this)" />
+            <div id="from-drop" class="airport-dropdown"></div>
+          </div>
+
+          <!-- SWAP button -->
+          <button class="swap-btn" title="Swap cities" onclick="swapCities()">⇄</button>
+
+          <!-- TO -->
+          <div class="search-field">
+            <label>To</label>
+            <input type="text" id="to-input" autocomplete="off"
+              placeholder="Where to?"
+              oninput="filterAirports(this,'to-drop')"
+              onfocus="openAirportDrop('to-drop',this)" />
+            <div id="to-drop" class="airport-dropdown"></div>
+          </div>
+
+          <!-- DEPARTURE DATE -->
+          <div class="search-field">
+            <label>Departure</label>
+            <input type="date" id="departure-date" value="2026-10-12" />
+          </div>
+
+          <!-- RETURN DATE -->
+          <div class="search-field">
+            <label>Return</label>
+            <input type="date" id="return-date" value="2026-10-19" />
+          </div>
+
+          <!-- PASSENGERS & CLASS -->
+          <div class="search-field pax-field" onclick="togglePaxPanel(event)">
+            <label>Passengers & Class</label>
+            <div class="pax-display" id="pax-display">1 Adult, Economy</div>
+            <!-- panel is fixed-positioned — see app.js for positionBelow() -->
+            <div class="pax-panel" id="pax-panel" onclick="event.stopPropagation()">
+              <div class="pax-row">
+                <div><div class="pax-label">Adults</div><div class="pax-sub">Age 12+</div></div>
+                <div class="pax-counter">
+                  <button class="pax-btn" id="adults-minus" onclick="changePax('adults',-1)">−</button>
+                  <span class="pax-num" id="adults-count">1</span>
+                  <button class="pax-btn" onclick="changePax('adults',1)">+</button>
+                </div>
+              </div>
+              <div class="pax-row">
+                <div><div class="pax-label">Children</div><div class="pax-sub">Age 2–11</div></div>
+                <div class="pax-counter">
+                  <button class="pax-btn" id="children-minus" onclick="changePax('children',-1)">−</button>
+                  <span class="pax-num" id="children-count">0</span>
+                  <button class="pax-btn" onclick="changePax('children',1)">+</button>
+                </div>
+              </div>
+              <div class="pax-row">
+                <div><div class="pax-label">Infants</div><div class="pax-sub">Under 2</div></div>
+                <div class="pax-counter">
+                  <button class="pax-btn" id="infants-minus" onclick="changePax('infants',-1)">−</button>
+                  <span class="pax-num" id="infants-count">0</span>
+                  <button class="pax-btn" onclick="changePax('infants',1)">+</button>
+                </div>
+              </div>
+              <div class="class-section">
+                <div class="class-title">Cabin Class</div>
+                <div class="class-options">
+                  <button class="class-btn selected" onclick="selectClass(this,'Economy')">Economy</button>
+                  <button class="class-btn" onclick="selectClass(this,'Business')">Business</button>
+                  <button class="class-btn" onclick="selectClass(this,'First')">First</button>
+                </div>
+              </div>
+              <button class="pax-done-btn" onclick="closePaxPanel()">Done</button>
+            </div>
+          </div>
+
+        </div><!-- end .search-form -->
+
+        <!-- Action bar — search button and trust badges -->
+        <div class="search-action-bar">
+          <div class="search-action-hints">
+            <div class="search-hint"><span>✈</span> Best price guarantee</div>
+            <div class="search-hint"><span>🔒</span> Secure booking</div>
+            <div class="search-hint"><span>↩</span> Free cancellation on select fares</div>
+          </div>
+          <button class="btn-search" onclick="searchFlights()">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+            </svg>
+            Search Flights
+          </button>
+        </div>
+
+      </div><!-- end .search-widget -->
+    </div>
+  </section>
+
+  <!-- Popular Destinations -->
+  <section class="section" style="background: var(--bg);">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Popular Destinations</h2>
+        <p class="section-sub">Discover our most sought-after routes for your next getaway.</p>
+      </div>
+      <a class="link-view-all">View All Destinations →</a>
+    </div>
+    <div class="dest-grid">
+
+      <div class="dest-card" onclick="searchFlights()">
+        <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=85&fit=crop&crop=center'); background-size:cover; background-position:center;">
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">Tokyo</div>
+          <div class="dest-country">Japan</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$899</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dest-card" onclick="searchFlights()">
+        <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=85&fit=crop&crop=center'); background-size:cover; background-position:center;">
+          <div class="dest-badge">RECOMMENDED</div>
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">Paris</div>
+          <div class="dest-country">France</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$599</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dest-card" onclick="searchFlights()">
+        <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=85&fit=crop&crop=center'); background-size:cover; background-position:center;">
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">Dubai</div>
+          <div class="dest-country">United Arab Emirates</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$749</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="dest-card" onclick="searchFlights()">
+        <div class="dest-img" style="background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=85&fit=crop&crop=center'); background-size:cover; background-position:center;">
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">London</div>
+          <div class="dest-country">United Kingdom</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$649</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Why Fly With Us -->
+  <section class="why-section">
+    <h2 class="section-title">Why Fly with Us</h2>
+    <p class="section-sub" style="margin-top:.4rem;">The perfect blend of efficiency, reliability, and luxury in every journey.</p>
+    <div class="why-grid" style="margin-top:2.5rem;">
+      <div class="why-card">
+        <div class="why-icon">📅</div>
+        <div class="why-title">Flexible Booking</div>
+        <div class="why-desc">Change or cancel with minimal hassle. Our policies are designed around your life, not the other way around.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🍽️</div>
+        <div class="why-title">Premium In-Flight Dining</div>
+        <div class="why-desc">Meals curated by world-class chefs, paired with fine wines and impeccable service — even at 35,000 feet.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏆</div>
+        <div class="why-title">Frequent Flyer Rewards</div>
+        <div class="why-desc">Earn miles on every journey. Unlock lounge access, priority boarding, and complimentary upgrades.</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          FlyDreamAir
+        </h3>
+        <p>Experience the world with premium comfort and unmatched reliability. Your journey is our passion.</p>
+        <div class="social-icons" style="margin-top:1rem;">
+          <div class="social-icon">f</div>
+          <div class="social-icon">𝕏</div>
+          <div class="social-icon">in</div>
+          <div class="social-icon">▶</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a>About Us</a></li>
+          <li><a>Careers</a></li>
+          <li><a>Press Room</a></li>
+          <li><a>Sustainability</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a>Help Center</a></li>
+          <li><a>Contact Us</a></li>
+          <li><a>Flight Status</a></li>
+          <li><a>Baggage Info</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a>Privacy Policy</a></li>
+          <li><a>Terms of Service</a></li>
+          <li><a>Cookie Settings</a></li>
+          <li><a>Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 FlyDreamAir. Effortless Ascension.</p>
+      <p>✈ Fly smarter. Fly further.</p>
+    </div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 5 — FLIGHT SEARCH RESULTS
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page5" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a class="active">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div><div class="dropdown-item-text"><div class="dropdown-item-title">Meals & Dining</div><div class="dropdown-item-desc">Pre-order your in-flight meal</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(255,193,7,.12);">🥂</div><div class="dropdown-item-text"><div class="dropdown-item-title">Food & Drinks</div><div class="dropdown-item-desc">Browse the in-flight menu</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div><div class="dropdown-item-text"><div class="dropdown-item-title">Entertainment</div><div class="dropdown-item-desc">300+ movies & shows</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div><div class="dropdown-item-text"><div class="dropdown-item-title">WiFi & Connectivity</div><div class="dropdown-item-desc">Plans from $9.99</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(139,92,246,.12);">🛍️</div><div class="dropdown-item-text"><div class="dropdown-item-title">Duty Free Shopping</div><div class="dropdown-item-desc">Exclusive in-flight shopping</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div><div class="dropdown-item-text"><div class="dropdown-item-title">Comfort & Amenities</div><div class="dropdown-item-desc">Pillows, blankets, headsets</div></div></a>
+          </div>
+          <div class="dropdown-promo"><div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals & save 15%</div><button class="dropdown-promo-btn">Order Now</button></div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Compact search summary bar — shows what the user searched for -->
+  <div class="results-search-bar">
+    <div class="results-route-display">
+      <div class="results-route-airports">
+        <span id="results-from">SYD</span>
+        <span class="results-route-arrow">→</span>
+        <span id="results-to">LHR</span>
+      </div>
+      <div class="results-route-meta">
+        <span>📅 <span id="results-date">12 Oct 2026</span></span>
+        <span>👤 <span id="results-pax">1 passenger</span></span>
+        <span>💺 <span id="results-class">Economy</span></span>
+      </div>
+    </div>
+    <button class="btn-edit-search" onclick="showPage(1)">✏️ Edit search</button>
+  </div>
+
+  <!-- Results layout: filters + flight list -->
+  <div class="results-layout">
+
+    <!-- Filter sidebar -->
+    <div class="filter-panel">
+      <div class="filter-title">Filter Results</div>
+
+      <div class="filter-group">
+        <div class="filter-group-label">Stops</div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Non-stop only</label>
+          <span class="filter-count">2</span>
+        </div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> 1 stop</label>
+          <span class="filter-count">2</span>
+        </div>
+        <div class="filter-option">
+          <label><input type="checkbox" /> 2+ stops</label>
+          <span class="filter-count">0</span>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-group-label">Price range</div>
+        <div class="price-range-display">
+          <span>$500</span><span>$1,200</span>
+        </div>
+        <input type="range" min="500" max="1200" value="1200" />
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-group-label">Departure time</div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Morning (6am–12pm)</label>
+        </div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Afternoon (12pm–6pm)</label>
+        </div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Evening (6pm–12am)</label>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <div class="filter-group-label">Aircraft type</div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Boeing 787</label>
+        </div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Airbus A350</label>
+        </div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Boeing 777</label>
+        </div>
+        <div class="filter-option">
+          <label><input type="checkbox" checked /> Airbus A380</label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flight list -->
+    <div>
+      <div class="sort-bar">
+        <span class="sort-label">Sort by:</span>
+        <button class="sort-option active">Recommended</button>
+        <button class="sort-option">Cheapest</button>
+        <button class="sort-option">Fastest</button>
+        <button class="sort-option">Departure</button>
+      </div>
+      <div class="results-count" id="results-count">Showing 5 flights</div>
+
+      <!-- flight cards are rendered by renderFlightCards() in app.js -->
+      <div id="flight-list"></div>
+    </div>
+
+  </div>
+
+  <footer style="margin-top:3rem;">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3></div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 2 — PASSENGER DETAILS
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page2" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a class="active">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div><div class="dropdown-item-text"><div class="dropdown-item-title">Meals & Dining</div><div class="dropdown-item-desc">Pre-order your in-flight meal</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div><div class="dropdown-item-text"><div class="dropdown-item-title">Entertainment</div><div class="dropdown-item-desc">300+ movies & shows</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div><div class="dropdown-item-text"><div class="dropdown-item-title">WiFi & Connectivity</div><div class="dropdown-item-desc">Plans from $9.99</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div><div class="dropdown-item-text"><div class="dropdown-item-title">Comfort & Amenities</div><div class="dropdown-item-desc">Pillows, blankets, headsets</div></div></a>
+          </div>
+          <div class="dropdown-promo"><div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals & save 15%</div><button class="dropdown-promo-btn">Order Now</button></div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Booking progress stepper -->
+  <div class="stepper-wrap">
+    <div class="stepper">
+      <div class="step done">
+        <div class="step-circle">✓</div>
+        <div class="step-label">Select Flight</div>
+      </div>
+      <div class="step active">
+        <div class="step-circle">2</div>
+        <div class="step-label">Passenger Info</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div class="step-label">Seat Selection</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div class="step-label">In-Flight Services</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">5</div>
+        <div class="step-label">Payment</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="booking-layout">
+    <!-- LEFT: Passenger forms -->
+    <div>
+      <h1 style="font-size:1.6rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;">Passenger Details</h1>
+      <p style="font-size:.875rem;color:var(--muted);margin-bottom:1.5rem;">Please make sure the names match exactly as they appear on your government-issued ID.</p>
+
+      <!-- Contact information -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <div class="form-section-icon">📧</div>
+          Contact Information
+        </div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:1.2rem;">Your booking confirmation and travel updates will be sent here.</p>
+        <div class="form-grid-2">
+          <div class="field-wrap">
+            <input type="email" placeholder=" " id="email" />
+            <label for="email">Email Address</label>
+          </div>
+          <div class="field-wrap">
+            <input type="tel" placeholder=" " id="phone" />
+            <label for="phone">Phone Number</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Passenger 1 info -->
+      <div class="form-section" style="border-top: 3px solid var(--gold);">
+        <div class="form-section-title">
+          <div class="form-section-icon">👤</div>
+          Passenger 1 (Adult)
+        </div>
+        <div class="form-grid-3" style="margin-bottom:1rem;">
+          <div class="field-wrap">
+            <select id="title" onchange="this.classList.add('has-value')">
+              <option value=""></option>
+              <option>Mr</option><option>Mrs</option><option>Ms</option><option>Dr</option>
+            </select>
+            <label for="title">Title</label>
+            <span class="select-arrow">▾</span>
+          </div>
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="fname" />
+            <label for="fname">First Name</label>
+          </div>
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="lname" />
+            <label for="lname">Last Name</label>
+          </div>
+        </div>
+        <div class="form-grid-2" style="margin-bottom:1rem;">
+          <div class="field-wrap">
+            <input type="date" id="dob" placeholder=" " />
+            <label for="dob" style="top:0;font-size:.7rem;font-weight:600;color:var(--sky);">Date of Birth</label>
+          </div>
+          <div class="field-wrap">
+            <select id="gender" onchange="this.classList.add('has-value')">
+              <option value=""></option>
+              <option>Male</option><option>Female</option><option>Other</option><option>Prefer not to say</option>
+            </select>
+            <label for="gender">Gender</label>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+        <div class="form-grid-2" style="margin-bottom:1rem;">
+          <div class="field-wrap">
+            <select id="nationality" onchange="this.classList.add('has-value')">
+              <option value=""></option>
+              <option>American</option><option>Australian</option><option>British</option>
+              <option>Canadian</option><option>French</option><option>German</option>
+              <option>Japanese</option><option>Vietnamese</option><option>Other</option>
+            </select>
+            <label for="nationality">Nationality</label>
+            <span class="select-arrow">▾</span>
+          </div>
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="passport" />
+            <label for="passport">Passport Number <span style="font-size:.65rem;color:var(--muted);">(optional)</span></label>
+          </div>
+        </div>
+        <div class="field-wrap">
+          <input type="text" placeholder=" " id="ffn" />
+          <label for="ffn">Frequent Flyer Number <span style="font-size:.65rem;color:var(--muted);">(optional)</span></label>
+        </div>
+      </div>
+
+      <!-- Special requests -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <div class="form-section-icon">🍽️</div>
+          Special Requests
+          <span class="optional-tag">Optional</span>
+        </div>
+        <div class="field-wrap" style="max-width:320px;margin-bottom:1rem;">
+          <select id="meal" onchange="this.classList.add('has-value')">
+            <option value=""></option>
+            <option>Standard</option><option>Vegetarian</option><option>Vegan</option>
+            <option>Halal</option><option>Kosher</option><option>Gluten-Free</option>
+          </select>
+          <label for="meal">Meal Preference</label>
+          <span class="select-arrow">▾</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="wheelchair" />
+          <label for="wheelchair">I require special assistance (wheelchair, visual, etc.)</label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-back" onclick="showPage(5)">← Back to Results</button>
+        <button class="btn-primary" onclick="showPage(6)">Continue to Seat Selection →</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Flight summary card -->
+    <div>
+      <div class="flight-summary-card">
+        <div class="summary-header">
+          <h3>Your Flight</h3>
+          <span class="plane-icon-summary">✈</span>
+        </div>
+        <div class="summary-route">
+          <div class="summary-city">
+            <div class="summary-code" id="sum-from">SYD</div>
+            <div class="summary-city-name" id="sum-from-city">Sydney</div>
+            <div class="summary-time" id="sum-depart">09:15 AM</div>
+          </div>
+          <div class="summary-connector">
+            <div class="summary-duration" id="sum-duration">14h 55m</div>
+            <div class="summary-line"></div>
+            <div class="summary-nonstop">✈ Non-stop</div>
+          </div>
+          <div class="summary-city" style="text-align:right;">
+            <div class="summary-code" id="sum-to">LHR</div>
+            <div class="summary-city-name" id="sum-to-city">London</div>
+            <div class="summary-time" id="sum-arrive">05:10 AM+1</div>
+          </div>
+        </div>
+        <div class="summary-details">
+          <div class="summary-detail">
+            <div class="summary-detail-label">Flight</div>
+            <div class="summary-detail-value" id="sum-flightnum">FD 204</div>
+          </div>
+          <div class="summary-detail">
+            <div class="summary-detail-label">Class</div>
+            <div class="summary-detail-value" id="sum-class">Economy</div>
+          </div>
+          <div class="summary-detail">
+            <div class="summary-detail-label">Date</div>
+            <div class="summary-detail-value">12 Oct 2026</div>
+          </div>
+          <div class="summary-detail">
+            <div class="summary-detail-label">Passengers</div>
+            <div class="summary-detail-value" id="sum-pax">1 Adult</div>
+          </div>
+        </div>
+        <div class="summary-price-row">
+          <div>
+            <div class="summary-price-label">Base fare</div>
+            <div class="summary-price-sub">Taxes & fees added at checkout</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="summary-price" id="sum-price">$845.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top:3rem;">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3></div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 6 — SEAT SELECTION
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page6" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a class="active">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <div class="stepper-wrap">
+    <div class="stepper">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Select Flight</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Passenger Info</div></div>
+      <div class="step active"><div class="step-circle">3</div><div class="step-label">Seat Selection</div></div>
+      <div class="step"><div class="step-circle">4</div><div class="step-label">In-Flight Services</div></div>
+      <div class="step"><div class="step-circle">5</div><div class="step-label">Payment</div></div>
+    </div>
+  </div>
+
+  <div class="seat-page-layout">
+
+    <!-- LEFT: Seat map -->
+    <div class="seat-map-container">
+      <div class="seat-map-title">Choose Your Seat</div>
+      <div class="seat-map-sub">Click a seat to select it. Greyed-out seats are already taken.</div>
+
+      <!-- Seat type legend -->
+      <div class="seat-legend">
+        <div class="legend-item"><div class="legend-swatch ls-available"></div> Available</div>
+        <div class="legend-item"><div class="legend-swatch ls-selected"></div> Your selection</div>
+        <div class="legend-item"><div class="legend-swatch ls-taken"></div> Taken</div>
+        <div class="legend-item"><div class="legend-swatch ls-extra"></div> Extra legroom (+$25)</div>
+        <div class="legend-item"><div class="legend-swatch ls-business"></div> Business class (+$180)</div>
+      </div>
+
+      <!-- Seat map is generated entirely by buildSeatMap() in app.js -->
+      <div id="seat-map" class="seat-map"></div>
+    </div>
+
+    <!-- RIGHT: Selection info panel -->
+    <div class="seat-info-panel">
+      <div class="seat-info-title">Your Selection</div>
+
+      <div class="selected-seat-display">
+        <div id="selected-seat-num" class="seat-number-big" style="color:var(--muted);">—</div>
+        <div id="selected-seat-type" class="seat-type-tag stt-none">No seat selected</div>
+      </div>
+
+      <div class="seat-pricing">
+        <div class="seat-price-row">
+          <div class="seat-price-label">Base fare</div>
+          <div class="seat-price-val" id="seat-base-fare">$845.00</div>
+        </div>
+        <div class="seat-price-row">
+          <div class="seat-price-label">Seat surcharge</div>
+          <div class="seat-price-val extra" id="seat-extra-fee">—</div>
+        </div>
+        <div class="seat-price-row" style="border-top:1px solid var(--border);padding-top:.5rem;margin-top:.5rem;">
+          <div class="seat-price-label" style="font-weight:700;color:var(--navy);">Subtotal</div>
+          <div class="seat-price-val" id="seat-total-price">$845.00</div>
+        </div>
+      </div>
+
+      <button id="seat-continue-btn" class="seat-continue-btn" onclick="continueFromSeat()" disabled>
+        Continue to In-Flight Services →
+      </button>
+      <span class="seat-skip-link" onclick="skipSeatSelection()">Skip — assign me any available seat</span>
+
+      <!-- Quick flight info reminder -->
+      <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-size:.7rem;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;margin-bottom:.5rem;">Your Flight</div>
+        <div style="font-size:.825rem;font-weight:700;color:var(--navy);" id="seat-flight-info">FD 204 · SYD → LHR</div>
+        <div style="font-size:.75rem;color:var(--muted);margin-top:.2rem;">12 Oct 2026 · 09:15 departure</div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer style="margin-top:2rem;">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3></div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 7 — IN-FLIGHT SERVICES
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page7" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a class="active">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <div class="stepper-wrap">
+    <div class="stepper">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Select Flight</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Passenger Info</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Seat Selection</div></div>
+      <div class="step active"><div class="step-circle">4</div><div class="step-label">In-Flight Services</div></div>
+      <div class="step"><div class="step-circle">5</div><div class="step-label">Payment</div></div>
+    </div>
+  </div>
+
+  <div class="services-layout">
+
+    <!-- LEFT: Menu sections with tabs -->
+    <div class="services-main">
+      <h1 class="services-page-title">Enhance Your Journey</h1>
+      <p class="services-page-sub">Pre-order meals, drinks, and extras — everything will be ready when you board.</p>
+
+      <!-- Tab bar -->
+      <div class="services-tabs">
+        <button class="services-tab active" onclick="switchServicesTab(this, 'meals-panel')">
+          🍽️ Meals
+        </button>
+        <button class="services-tab" onclick="switchServicesTab(this, 'drinks-panel')">
+          🥂 Drinks
+        </button>
+        <button class="services-tab" onclick="switchServicesTab(this, 'snacks-panel')">
+          🍿 Snacks
+        </button>
+        <button class="services-tab" onclick="switchServicesTab(this, 'wifi-panel')">
+          📶 WiFi
+        </button>
+      </div>
+
+      <!-- Tab panels — content is injected by renderServicesMenu() in app.js -->
+      <div id="meals-panel"  class="services-panel active"></div>
+      <div id="drinks-panel" class="services-panel"></div>
+      <div id="snacks-panel" class="services-panel"></div>
+      <div id="wifi-panel"   class="services-panel"></div>
+
+      <div class="form-actions" style="margin-top:1rem;">
+        <button class="btn-back" onclick="showPage(6)">← Back to Seats</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Cart -->
+    <div class="services-cart">
+      <div class="cart-title">
+        Your Cart
+        <div class="cart-count-badge" id="cart-count">0</div>
+      </div>
+
+      <!-- Cart items are rendered by updateCart() in app.js -->
+      <div id="cart-items"></div>
+
+      <div class="cart-total-row">
+        <div class="cart-total-label">Extras Total</div>
+        <div class="cart-total-price" id="cart-total">$0.00</div>
+      </div>
+
+      <button class="cart-continue-btn" onclick="continueToPayment()">
+        Continue to Payment →
+      </button>
+      <button class="cart-skip-btn" onclick="continueToPayment()">
+        Skip — no extras for this flight
+      </button>
+    </div>
+
+  </div>
+
+  <footer style="margin-top:2rem;">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3></div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 8 — PAYMENT
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page8" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a class="active">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <div class="stepper-wrap">
+    <div class="stepper">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Select Flight</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Passenger Info</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Seat Selection</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">In-Flight Services</div></div>
+      <div class="step active"><div class="step-circle">5</div><div class="step-label">Payment</div></div>
+    </div>
+  </div>
+
+  <div class="payment-layout">
+
+    <!-- LEFT: Payment form -->
+    <div>
+      <h1 class="payment-title">Secure Payment</h1>
+      <p class="payment-sub">Your connection is encrypted and your card details are never stored on our servers.</p>
+
+      <!-- Card details section -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <div class="form-section-icon">💳</div>
+          Card Details
+        </div>
+
+        <!-- Card brand indicators -->
+        <div class="card-brands">
+          <div class="card-brand-icon" id="brand-visa">VISA</div>
+          <div class="card-brand-icon" id="brand-mc">MC</div>
+          <div class="card-brand-icon" id="brand-amex">AMEX</div>
+          <div class="card-brand-icon">DISC</div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label class="card-field-label">Card Number</label>
+          <div class="card-input-wrap">
+            <span class="card-input-icon">💳</span>
+            <input type="text" id="card-number" placeholder="1234 5678 9012 3456"
+              inputmode="numeric" maxlength="19"
+              oninput="formatCardNumber(this)" />
+          </div>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <label class="card-field-label">Cardholder Name</label>
+          <div class="card-input-wrap">
+            <span class="card-input-icon">👤</span>
+            <input type="text" id="card-name" placeholder="Name as it appears on card" />
+          </div>
+        </div>
+
+        <div class="form-grid-2">
+          <div>
+            <label class="card-field-label">Expiry Date</label>
+            <div class="card-input-wrap">
+              <span class="card-input-icon">📅</span>
+              <input type="text" id="card-expiry" placeholder="MM/YY" maxlength="5"
+                oninput="formatExpiry(this)" />
+            </div>
+          </div>
+          <div>
+            <label class="card-field-label">CVV / CVC</label>
+            <div class="card-input-wrap">
+              <span class="card-input-icon">🔒</span>
+              <input type="text" id="card-cvv" placeholder="3 digits" maxlength="4" inputmode="numeric" />
+            </div>
+          </div>
+        </div>
+
+        <div class="payment-secure-note">
+          <span>🔒</span>
+          256-bit SSL encryption · PCI DSS compliant · Your details are never stored
+        </div>
+      </div>
+
+      <!-- Billing address (optional) -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <div class="form-section-icon">🏠</div>
+          Billing Address
+          <span class="optional-tag">Optional</span>
+        </div>
+        <div class="form-grid-2" style="margin-bottom:1rem;">
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="billing-country" />
+            <label for="billing-country">Country</label>
+          </div>
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="billing-zip" />
+            <label for="billing-zip">Postal / ZIP Code</label>
+          </div>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="billing-same" checked />
+          <label for="billing-same">Billing address is the same as my passenger address</label>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button class="btn-back" onclick="showPage(7)">← Back to Services</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Order summary -->
+    <div>
+      <div class="order-summary-card">
+        <div class="order-summary-title">Order Summary</div>
+
+        <!-- Flight line -->
+        <div class="order-line">
+          <div class="order-line-label">✈ <span id="pay-flight-line">FD 204 · SYD → LHR</span></div>
+          <div class="order-line-value" id="pay-flight-price">$845.00</div>
+        </div>
+
+        <!-- Seat -->
+        <div class="order-line">
+          <div class="order-line-label">💺 <span id="pay-seat-line">Seat (Economy)</span></div>
+          <div class="order-line-value" id="pay-seat-price">Included</div>
+        </div>
+
+        <!-- In-flight extras -->
+        <div class="order-line">
+          <div class="order-line-label" style="flex-direction:column;align-items:flex-start;">
+            🍽️ In-flight services
+            <span style="font-size:.7rem;color:var(--muted);margin-top:.1rem;" id="pay-services-detail">None selected</span>
+          </div>
+          <div class="order-line-value" id="pay-services-price">—</div>
+        </div>
+
+        <div class="order-section-divider"></div>
+
+        <div class="order-line">
+          <div class="order-line-label">Subtotal</div>
+          <div class="order-line-value" id="pay-subtotal"></div>
+        </div>
+        <div class="order-line">
+          <div class="order-line-label">Taxes & fees (~11.5%)</div>
+          <div class="order-line-value" id="pay-taxes">$97.18</div>
+        </div>
+
+        <div class="order-total-row">
+          <div>
+            <div class="order-total-label">Total (AUD)</div>
+            <div class="order-total-sub">Includes all taxes and fees</div>
+          </div>
+          <div class="order-total-amount" id="pay-total">$942.18</div>
+        </div>
+
+        <button id="pay-btn" class="btn-pay" onclick="submitPayment()">
+          🔒 Complete Booking
+        </button>
+
+        <div class="payment-guarantee">
+          <span>✅</span> Instant confirmation · Free cancellation within 24 hrs
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <footer style="margin-top:2rem;">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3></div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 3 — BOOKING CONFIRMATION
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page3" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a onclick="showPage(5)">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Success hero -->
+  <div class="confirm-hero">
+    <div class="success-circle">
+      <span class="success-check">✅</span>
+    </div>
+    <h1 class="confirm-title">Booking Confirmed!</h1>
+    <p class="confirm-sub">Your reservation has been successfully processed. Check your email for the full itinerary.</p>
+    <div class="booking-ref-card">
+      <div class="booking-ref-label">Booking Reference</div>
+      <div class="booking-ref-num" id="confirm-ref-num">FDA-7X9K2P</div>
+    </div>
+  </div>
+
+  <!-- Boarding Pass -->
+  <div class="boarding-section">
+    <div class="boarding-pass">
+      <!-- Left half -->
+      <div class="bp-left">
+        <div class="bp-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#1E90FF"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          FlyDreamAir
+        </div>
+        <div class="bp-route">
+          <div class="bp-airport">
+            <div class="bp-airport-code" id="bp-from">SYD</div>
+            <div class="bp-airport-name" id="bp-from-name">Sydney</div>
+          </div>
+          <div class="bp-connector">
+            <div class="bp-flight-line">
+              <div class="bp-line"></div>
+              <div class="bp-plane">✈</div>
+              <div class="bp-line"></div>
+            </div>
+            <div class="bp-nonstop">Non-stop</div>
+            <div class="bp-duration" id="bp-duration">14h 55m</div>
+          </div>
+          <div class="bp-airport" style="text-align:right;">
+            <div class="bp-airport-code" id="bp-to">LHR</div>
+            <div class="bp-airport-name" id="bp-to-name">London</div>
+          </div>
+        </div>
+        <div class="bp-grid">
+          <div>
+            <div class="bp-field-label">Passenger</div>
+            <div class="bp-field-value" id="bp-name">JOHN SMITH</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Date</div>
+            <div class="bp-field-value">12 Oct 2026</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Departure</div>
+            <div class="bp-field-value large" id="bp-depart">09:15</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Boarding</div>
+            <div class="bp-field-value large" id="bp-boarding">08:45</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Flight</div>
+            <div class="bp-field-value" id="bp-flight">FD 204</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Class</div>
+            <div class="bp-field-value" id="bp-class">Economy</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Gate</div>
+            <div class="bp-field-value large">B12</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Terminal</div>
+            <div class="bp-field-value large">T1</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Perforated divider -->
+      <div class="bp-divider">
+        <div class="bp-divider-dots"></div>
+      </div>
+
+      <!-- Right half (stub) -->
+      <div class="bp-right">
+        <div class="bp-passenger">
+          <div class="bp-passenger-label">Passenger</div>
+          <div class="bp-passenger-name" id="bp-name-2">JOHN SMITH</div>
+        </div>
+        <div class="bp-seat-badge">
+          <div class="bp-seat-label">Seat</div>
+          <div class="bp-seat-num" id="bp-seat-num">22A</div>
+        </div>
+        <!-- SVG QR code (decorative) -->
+        <div>
+          <svg width="110" height="110" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+            <rect width="110" height="110" rx="6" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+            <rect x="8"  y="8"  width="28" height="28" rx="2" fill="#0A2540"/>
+            <rect x="12" y="12" width="20" height="20" rx="1" fill="white"/>
+            <rect x="16" y="16" width="12" height="12" rx="1" fill="#0A2540"/>
+            <rect x="74" y="8"  width="28" height="28" rx="2" fill="#0A2540"/>
+            <rect x="78" y="12" width="20" height="20" rx="1" fill="white"/>
+            <rect x="82" y="16" width="12" height="12" rx="1" fill="#0A2540"/>
+            <rect x="8"  y="74" width="28" height="28" rx="2" fill="#0A2540"/>
+            <rect x="12" y="78" width="20" height="20" rx="1" fill="white"/>
+            <rect x="16" y="82" width="12" height="12" rx="1" fill="#0A2540"/>
+            <rect x="44" y="8"  width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="8"  width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="8"  width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="16" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="16" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="24" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="68" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="60" width="4" height="4" fill="#0A2540"/>
+            <rect x="76" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="84" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="92" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="76" y="84" width="4" height="4" fill="#0A2540"/>
+            <rect x="92" y="84" width="4" height="4" fill="#0A2540"/>
+            <rect x="84" y="92" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="84" width="4" height="4" fill="#0A2540"/>
+          </svg>
+          <div style="font-size:.6rem;color:var(--muted);text-align:center;margin-top:.3rem;">Scan to board</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payment and ticket summary -->
+  <div class="confirm-details">
+    <div class="confirm-details-card">
+      <div class="confirm-details-title">Payment & Ticket Summary</div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">Total Amount Paid</span>
+        <span class="confirm-detail-val" style="font-size:1rem;font-weight:800;color:var(--navy);" id="confirm-total">$942.18</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">Payment Method</span>
+        <span class="confirm-detail-val">Card ending in ····</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">E-Ticket Number</span>
+        <span class="confirm-detail-val" style="font-family:monospace;" id="confirm-ticket">ET-FDA-2026-00000</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">Booking Reference</span>
+        <span class="confirm-detail-val" style="color:var(--navy);font-weight:800;font-family:monospace;" id="confirm-ref-detail">FDA-7X9K2P</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">Booking Status</span>
+        <span class="confirm-detail-val" style="color:var(--green);">✓ Confirmed</span>
+      </div>
+    </div>
+
+    <div class="action-buttons">
+      <button class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download E-Ticket (PDF)
+      </button>
+      <button class="btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Confirmation
+      </button>
+      <button class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Add to Calendar
+      </button>
+    </div>
+  </div>
+
+  <!-- What's next -->
+  <div class="whats-next">
+    <h3>What's Next?</h3>
+    <div class="next-grid">
+      <div class="next-card" onclick="showPage(4)">
+        <div class="next-icon">📋</div>
+        <div>
+          <div class="next-title">Manage Your Booking</div>
+          <div class="next-desc">Change your flight, add baggage, or update passenger details any time before departure.</div>
+        </div>
+      </div>
+      <div class="next-card" onclick="showPage(7)">
+        <div class="next-icon">🍽️</div>
+        <div>
+          <div class="next-title">Add More Extras</div>
+          <div class="next-desc">Pre-select in-flight meals, order duty-free, or upgrade your WiFi plan up to 48 hrs before departure.</div>
+        </div>
+      </div>
+      <div class="next-card">
+        <div class="next-icon">📱</div>
+        <div>
+          <div class="next-title">Online Check-in</div>
+          <div class="next-desc">Check-in opens 24 hours before your departure. Select your seat and get your boarding pass digitally.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top:4rem;">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3></div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     PAGE 4 — MANAGE BOOKING
+     ═══════════════════════════════════════════════════════════════════════ -->
+<div id="page4" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a onclick="showPage(5)">Book a Flight</a></li>
+      <li><a class="active">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div><div class="dropdown-item-text"><div class="dropdown-item-title">Meals & Dining</div><div class="dropdown-item-desc">Pre-order your in-flight meal</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(255,193,7,.12);">🥂</div><div class="dropdown-item-text"><div class="dropdown-item-title">Food & Drinks</div><div class="dropdown-item-desc">Browse the in-flight menu</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div><div class="dropdown-item-text"><div class="dropdown-item-title">Entertainment</div><div class="dropdown-item-desc">300+ movies & shows</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div><div class="dropdown-item-text"><div class="dropdown-item-title">WiFi & Connectivity</div><div class="dropdown-item-desc">Plans from $9.99</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(139,92,246,.12);">🛍️</div><div class="dropdown-item-text"><div class="dropdown-item-title">Duty Free Shopping</div><div class="dropdown-item-desc">Exclusive in-flight shopping</div></div></a>
+            <a class="dropdown-item"><div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div><div class="dropdown-item-text"><div class="dropdown-item-title">Comfort & Amenities</div><div class="dropdown-item-desc">Pillows, blankets, headsets</div></div></a>
+          </div>
+          <div class="dropdown-promo"><div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals & save 15%</div><button class="dropdown-promo-btn">Order Now</button></div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Hero banner -->
+  <div class="mb-hero">
+    <div style="position:relative;z-index:2;">
+      <div class="mb-hero-tag">✈ Booking Management</div>
+      <h1>Manage Your Booking</h1>
+      <p>View, change or cancel your reservation — anytime, anywhere</p>
+    </div>
+  </div>
+
+  <!-- Lookup form card (floats over the hero) -->
+  <div class="mb-lookup-wrap">
+    <div class="mb-lookup-card">
+      <div class="mb-lookup-title">🔍 Find your booking</div>
+      <div class="mb-lookup-grid">
+        <div class="mb-field">
+          <label>Booking Reference</label>
+          <input type="text" id="mb-ref" placeholder="e.g. FDA-7X9K2P" maxlength="12"
+            oninput="this.value = this.value.toUpperCase()" />
+        </div>
+        <div class="mb-field">
+          <label>Email Address</label>
+          <input type="email" id="mb-lastname" placeholder="e.g. john@email.com" />
+        </div>
+      </div>
+      <p class="mb-ref-hint">💡 Use the email address you provided when booking</p>
+      <button class="btn-find" onclick="findBooking()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Find My Booking
+      </button>
+      <div class="mb-divider">or</div>
+      <div style="display:flex;gap:.75rem;">
+        <button onclick="showPage(5)"
+          style="flex:1;padding:.7rem;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:.85rem;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s;"
+          onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">
+          ✈ Book a new flight
+        </button>
+        <button
+          style="flex:1;padding:.7rem;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:.85rem;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s;"
+          onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">
+          📧 Resend confirmation email
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result: Booking found -->
+  <div class="mb-result" id="mb-result">
+    <div class="mb-booking-card">
+      <div class="mb-booking-header">
+        <div>
+          <div class="mb-ref-label">Booking Reference</div>
+          <div class="mb-ref-code" id="mb-display-ref">FDA-7X9K2P</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mb-status-badge">
+            <div class="mb-status-dot"></div>
+            Confirmed
+          </div>
+          <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-top:.4rem;">E-Ticket: ET-FDA-2026-98234</div>
+        </div>
+      </div>
+
+      <!-- Route display -->
+      <div class="mb-route-strip">
+        <div>
+          <div class="mb-airport-code">SYD</div>
+          <div class="mb-airport-city">Sydney, Australia</div>
+          <div class="mb-airport-time">09:15 AM</div>
+        </div>
+        <div class="mb-connector">
+          <div class="mb-duration">14h 55m</div>
+          <div class="mb-flight-line"><div class="mb-fl"></div><div class="mb-plane-icon">✈</div><div class="mb-fl"></div></div>
+          <div class="mb-nonstop">Non-stop</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mb-airport-code">LHR</div>
+          <div class="mb-airport-city">London, United Kingdom</div>
+          <div class="mb-airport-time">05:10 AM+1</div>
+        </div>
+      </div>
+
+      <!-- Detail grid -->
+      <div class="mb-details-grid">
+        <div class="mb-detail">
+          <div class="mb-detail-label">Passenger</div>
+          <div class="mb-detail-value" id="mb-display-name">John Smith</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Flight</div>
+          <div class="mb-detail-value">FD 204</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Date</div>
+          <div class="mb-detail-value">12 Oct 2026</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Class / Seat</div>
+          <div class="mb-detail-value">Economy · 22A</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Check-in Opens</div>
+          <div class="mb-detail-value">11 Oct · 09:15 AM</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Gate Closes</div>
+          <div class="mb-detail-value">12 Oct · 08:45 AM</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Baggage</div>
+          <div class="mb-detail-value">1 × 23 kg</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Total Paid</div>
+          <div class="mb-detail-value" style="color:var(--sky);">$942.18</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action cards -->
+    <div class="mb-actions-title">What would you like to do?</div>
+    <div class="mb-actions-grid">
+      <div class="mb-action-card" onclick="showPage(5)">
+        <div class="mb-action-icon" style="background:rgba(30,144,255,.1);">✈</div>
+        <div class="mb-action-name">Change Flight</div>
+        <div class="mb-action-desc">Reschedule to a different date or route. Fare difference may apply.</div>
+        <div class="mb-action-arrow">Change →</div>
+      </div>
+      <div class="mb-action-card" onclick="showPage(6)">
+        <div class="mb-action-icon" style="background:rgba(16,185,129,.1);">🪑</div>
+        <div class="mb-action-name">Select / Change Seat</div>
+        <div class="mb-action-desc">Pick a different seat — window, aisle or extra legroom.</div>
+        <div class="mb-action-arrow">Select →</div>
+      </div>
+      <div class="mb-action-card" onclick="showPage(7)">
+        <div class="mb-action-icon" style="background:rgba(255,107,53,.1);">🍽️</div>
+        <div class="mb-action-name">Pre-order Meals & Extras</div>
+        <div class="mb-action-desc">Pick your meal, drinks, WiFi and more up to 48 hrs before departure.</div>
+        <div class="mb-action-arrow">Order →</div>
+      </div>
+      <div class="mb-action-card">
+        <div class="mb-action-icon" style="background:rgba(139,92,246,.1);">🧳</div>
+        <div class="mb-action-name">Add Baggage</div>
+        <div class="mb-action-desc">Purchase extra checked bags or increase your allowance online.</div>
+        <div class="mb-action-arrow">Add →</div>
+      </div>
+      <div class="mb-action-card">
+        <div class="mb-action-icon" style="background:rgba(245,184,0,.1);">📱</div>
+        <div class="mb-action-name">Online Check-in</div>
+        <div class="mb-action-desc">Opens 24 hours before departure. Get your boarding pass instantly.</div>
+        <div class="mb-action-arrow">Check in →</div>
+      </div>
+      <div class="mb-action-card" style="border-color:rgba(239,68,68,.15);">
+        <div class="mb-action-icon" style="background:rgba(239,68,68,.08);">❌</div>
+        <div class="mb-action-name" style="color:#ef4444;">Cancel Booking</div>
+        <div class="mb-action-desc">Cancel your reservation. Refund eligibility depends on your fare type.</div>
+        <div class="mb-action-arrow" style="color:#ef4444;">Cancel →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result: Not found -->
+  <div class="mb-not-found" id="mb-not-found">
+    <div class="mb-nf-icon">🔍</div>
+    <div class="mb-nf-title">Booking not found</div>
+    <div class="mb-nf-desc">We couldn't find a booking matching those details. Double-check your reference number and email address, then try again.</div>
+    <button onclick="resetSearch()" style="margin-top:1.25rem;padding:.7rem 1.8rem;border-radius:10px;background:var(--sky);color:white;font-size:.875rem;font-weight:700;border:none;cursor:pointer;">Try Again</button>
+  </div>
+
+  <footer style="margin-top:4rem;">
+    <div class="footer-grid">
+      <div class="footer-brand"><h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3></div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+
+<script src="js/app.js"></script>
+</body>
+</html>
