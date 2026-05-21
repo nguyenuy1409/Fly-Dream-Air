@@ -1,0 +1,2550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FlyDreamAir — Your Dream Journey Starts Here</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<style>
+  /* ─── RESET & BASE ──────────────────────────────────────── */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #F8FAFC;
+    color: #1E293B;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { text-decoration: none; color: inherit; }
+  button { cursor: pointer; border: none; font-family: inherit; }
+  input, select, textarea { font-family: inherit; }
+
+  /* ─── DESIGN TOKENS ─────────────────────────────────────── */
+  :root {
+    --navy:   #0A2540;
+    --sky:    #1E90FF;
+    --gold:   #F5B800;
+    --bg:     #F8FAFC;
+    --text:   #1E293B;
+    --muted:  #64748B;
+    --border: #E2E8F0;
+    --white:  #FFFFFF;
+    --green:  #10B981;
+    --radius: 12px;
+    --shadow: 0 4px 24px rgba(10,37,64,.10);
+    --shadow-lg: 0 8px 40px rgba(10,37,64,.16);
+  }
+
+  /* ─── PAGE SWITCHER ─────────────────────────────────────── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ─── NAVBAR ────────────────────────────────────────────── */
+  .navbar {
+    position: sticky; top: 0; z-index: 100;
+    background: var(--navy);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2.5rem;
+    height: 64px;
+    box-shadow: 0 2px 12px rgba(10,37,64,.3);
+  }
+  .nav-logo {
+    display: flex; align-items: center; gap: .6rem;
+    color: var(--white); font-weight: 800; font-size: 1.25rem; letter-spacing: -.02em;
+    cursor: pointer;
+  }
+  .nav-logo svg { color: var(--gold); }
+  .nav-links {
+    display: flex; align-items: center; gap: 1.8rem;
+    list-style: none;
+  }
+  .nav-links a {
+    color: rgba(255,255,255,.8); font-size: .875rem; font-weight: 500;
+    transition: color .2s; padding: .25rem 0; border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--white); border-color: var(--gold); }
+  .nav-actions { display: flex; align-items: center; gap: .75rem; }
+  .btn-login {
+    color: var(--white); font-size: .875rem; font-weight: 500; background: none;
+    padding: .4rem .9rem; border-radius: 8px; border: 1px solid rgba(255,255,255,.3);
+    transition: all .2s;
+  }
+  .btn-login:hover { border-color: var(--white); background: rgba(255,255,255,.1); }
+  .btn-signup {
+    background: var(--gold); color: var(--navy); font-size: .875rem; font-weight: 700;
+    padding: .45rem 1.1rem; border-radius: 8px; transition: all .2s;
+  }
+  .btn-signup:hover { background: #e0a800; transform: translateY(-1px); }
+
+  /* ─── PAGE 1 – HERO ─────────────────────────────────────── */
+  .hero {
+    position: relative; min-height: 620px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+    /* Real airplane-in-flight photo from Unsplash */
+    background-image: url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?w=1920&q=90&fit=crop&crop=center');
+    background-size: cover;
+    background-position: center 40%;
+    background-color: #0A2540; /* fallback */
+  }
+  /* Dark gradient overlay — keeps text readable */
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(
+        to bottom,
+        rgba(8, 28, 56, 0.55)  0%,
+        rgba(8, 28, 56, 0.35) 45%,
+        rgba(8, 28, 56, 0.62) 100%
+      );
+  }
+  /* Bottom fade to blend into page */
+  .hero-sunset {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 30%;
+    background: linear-gradient(0deg, rgba(8,28,56,.75) 0%, transparent 100%);
+  }
+
+  .hero-inner {
+    position: relative; z-index: 2;
+    display: flex; flex-direction: column; align-items: center;
+    padding: 4rem 1.5rem 3rem;
+    width: 100%; max-width: 900px;
+  }
+  .hero-headline {
+    font-size: clamp(2rem, 4.5vw, 3.2rem);
+    font-weight: 900; color: var(--white);
+    text-align: center; line-height: 1.15; letter-spacing: -.03em;
+    text-shadow: 0 2px 24px rgba(0,0,0,.65), 0 1px 6px rgba(0,0,0,.5);
+  }
+  .hero-headline span { color: var(--gold); }
+  .hero-sub {
+    margin-top: .75rem;
+    color: rgba(255,255,255,.92); font-size: 1.05rem; text-align: center;
+    text-shadow: 0 1px 12px rgba(0,0,0,.6);
+  }
+
+  /* Search Widget */
+  .search-widget {
+    margin-top: 2.2rem; width: 100%;
+    background: var(--white); border-radius: 18px;
+    box-shadow: var(--shadow-lg);
+    /* overflow: visible so dropdown panels aren't clipped */
+    overflow: visible;
+  }
+  .trip-tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    border-radius: 18px 18px 0 0;
+    background: var(--white);
+  }
+  .trip-tab {
+    padding: .9rem 1.2rem; font-size: .875rem; font-weight: 600;
+    color: var(--muted); background: none; border-bottom: 3px solid transparent;
+    transition: all .2s; margin-bottom: -1px;
+  }
+  .trip-tab.active { color: var(--navy); border-color: var(--sky); }
+  .trip-tab:hover:not(.active) { color: var(--text); }
+  .search-form {
+    display: grid;
+    grid-template-columns: 1fr 44px 1fr 1fr 1fr 1fr;
+    gap: 0; align-items: stretch;
+    padding: 1.1rem 1.5rem 0;
+    background: var(--white);
+    overflow: visible;
+  }
+  .search-field {
+    display: flex; flex-direction: column; gap: .2rem;
+    padding: .55rem .9rem; border-right: 1px solid var(--border);
+  }
+  .search-field:last-of-type { border-right: none; }
+  .search-field label { font-size: .68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+  .search-field input, .search-field select {
+    border: none; outline: none; font-size: .95rem; font-weight: 600; color: var(--navy);
+    background: transparent; width: 100%;
+  }
+  .search-field select option { color: var(--text); }
+  .swap-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--bg); border: 1px solid var(--border);
+    color: var(--muted); font-size: 1rem; transition: all .2s;
+    margin: auto;
+  }
+  .swap-btn:hover { background: var(--sky); color: var(--white); border-color: var(--sky); }
+
+  /* Search action bar — full-width row below the fields */
+  .search-action-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1rem 1.5rem 1.2rem;
+    border-top: 1px solid var(--border);
+    margin-top: 1rem;
+    gap: 1rem;
+    border-radius: 0 0 18px 18px;
+    background: var(--white);
+  }
+  .search-action-hints {
+    display: flex; align-items: center; gap: 1.25rem;
+  }
+  .search-hint {
+    display: flex; align-items: center; gap: .35rem;
+    font-size: .75rem; color: var(--muted); font-weight: 500;
+  }
+  .search-hint span { font-size: .85rem; }
+  .btn-search {
+    padding: .82rem 2.4rem; border-radius: 12px;
+    background: var(--sky); color: var(--white);
+    font-size: .975rem; font-weight: 700; letter-spacing: .01em;
+    transition: all .2s; display: flex; align-items: center; gap: .5rem;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .btn-search:hover { background: #0e7de0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,144,255,.38); }
+
+  /* ─── POPULAR DESTINATIONS ──────────────────────────────── */
+  .section { padding: 5rem 2.5rem; }
+  .section-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; }
+  .section-title { font-size: 1.8rem; font-weight: 800; color: var(--navy); letter-spacing: -.02em; }
+  .section-sub { color: var(--muted); font-size: .925rem; margin-top: .3rem; }
+  .link-view-all { color: var(--sky); font-size: .875rem; font-weight: 600; transition: color .2s; }
+  .link-view-all:hover { color: #0e7de0; }
+  .dest-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
+  .dest-card {
+    border-radius: 14px; overflow: hidden;
+    box-shadow: var(--shadow); transition: transform .25s, box-shadow .25s;
+    background: var(--white); cursor: pointer;
+  }
+  .dest-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-lg); }
+  .dest-img {
+    height: 185px; position: relative; overflow: hidden;
+    background-size: cover; background-position: center;
+  }
+  .dest-badge {
+    position: absolute; top: 10px; left: 10px;
+    background: var(--gold); color: var(--navy);
+    font-size: .68rem; font-weight: 800; padding: .2rem .55rem;
+    border-radius: 6px; text-transform: uppercase; letter-spacing: .05em;
+  }
+  .dest-info { padding: 1rem 1.1rem 1.25rem; }
+  .dest-city { font-size: 1.05rem; font-weight: 700; color: var(--navy); }
+  .dest-country { font-size: .8rem; color: var(--muted); margin-top: .1rem; }
+  .dest-price-row { display: flex; justify-content: space-between; align-items: center; margin-top: .8rem; }
+  .dest-from { font-size: .7rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+  .dest-price { font-size: 1.1rem; font-weight: 800; color: var(--navy); }
+
+  /* Destination card photo overlay — subtle bottom fade */
+  .dest-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(
+      to bottom,
+      transparent 40%,
+      rgba(0,0,0,.32) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* ─── WHY FLY ────────────────────────────────────────────── */
+  .why-section { background: var(--navy); padding: 5rem 2.5rem; }
+  .why-section .section-title { color: var(--white); text-align: center; }
+  .why-section .section-sub { color: rgba(255,255,255,.6); text-align: center; margin-bottom: 3rem; }
+  .why-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; max-width: 900px; margin: 0 auto; }
+  .why-card {
+    text-align: center; padding: 2rem 1.5rem;
+    background: rgba(255,255,255,.06); border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.1);
+    transition: background .2s;
+  }
+  .why-card:hover { background: rgba(255,255,255,.1); }
+  .why-icon {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--sky), #0e7de0);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.1rem; font-size: 1.4rem;
+  }
+  .why-title { font-size: 1rem; font-weight: 700; color: var(--white); margin-bottom: .5rem; }
+  .why-desc { font-size: .85rem; color: rgba(255,255,255,.6); line-height: 1.6; }
+
+  /* ─── FOOTER ────────────────────────────────────────────── */
+  footer {
+    background: #060F1C; color: rgba(255,255,255,.6);
+    padding: 3rem 2.5rem 1.5rem;
+  }
+  .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2.5rem; }
+  .footer-brand h3 { color: var(--white); font-weight: 800; font-size: 1.1rem; margin-bottom: .75rem; display: flex; align-items: center; gap: .5rem; }
+  .footer-brand p { font-size: .825rem; line-height: 1.7; }
+  .footer-col h4 { color: var(--white); font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 1rem; }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+  .footer-col ul li a { font-size: .825rem; color: rgba(255,255,255,.55); transition: color .2s; cursor: pointer; }
+  .footer-col ul li a:hover { color: var(--white); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.5rem; display: flex; justify-content: space-between; align-items: center; }
+  .footer-bottom p { font-size: .775rem; }
+  .social-icons { display: flex; gap: .75rem; }
+  .social-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.1);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; color: rgba(255,255,255,.6); transition: all .2s; cursor: pointer;
+  }
+  .social-icon:hover { background: var(--sky); color: var(--white); border-color: var(--sky); }
+
+  /* ─── IN-FLIGHT SERVICES DROPDOWN ──────────────────────── */
+  .nav-has-dropdown { position: relative; }
+  .nav-dropdown-trigger {
+    display: flex; align-items: center; gap: .3rem; cursor: pointer;
+  }
+  .nav-dropdown-trigger .caret {
+    font-size: .6rem; transition: transform .22s;
+    display: inline-block; margin-top: 1px;
+  }
+  .nav-has-dropdown:hover .caret { transform: rotate(180deg); }
+
+  .nav-dropdown-panel {
+    position: absolute; top: calc(100% + 18px); left: 50%;
+    transform: translateX(-50%);
+    width: 560px; background: var(--white);
+    border-radius: 16px; border: 1px solid var(--border);
+    box-shadow: 0 12px 48px rgba(10,37,64,.18);
+    padding: 1.4rem; z-index: 300;
+    opacity: 0; visibility: hidden; pointer-events: none;
+    transition: opacity .2s, transform .2s, visibility .2s;
+    transform: translateX(-50%) translateY(-6px);
+  }
+  /* small notch arrow */
+  .nav-dropdown-panel::before {
+    content: '';
+    position: absolute; top: -7px; left: 50%; transform: translateX(-50%);
+    width: 14px; height: 14px; background: var(--white);
+    border-left: 1px solid var(--border); border-top: 1px solid var(--border);
+    rotate: 45deg; border-radius: 2px 0 0 0;
+  }
+  .nav-has-dropdown:hover .nav-dropdown-panel {
+    opacity: 1; visibility: visible; pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* Dropdown header */
+  .dropdown-header {
+    font-size: .68rem; font-weight: 800; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .08em;
+    padding-bottom: .75rem; margin-bottom: .75rem;
+    border-bottom: 1px solid var(--border);
+  }
+  /* 2-column grid of service items */
+  .dropdown-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: .4rem;
+  }
+  .dropdown-item {
+    display: flex; align-items: flex-start; gap: .75rem;
+    padding: .72rem .85rem; border-radius: 10px;
+    transition: background .15s; cursor: pointer; text-decoration: none;
+  }
+  .dropdown-item:hover { background: rgba(30,144,255,.07); }
+  .dropdown-item-icon {
+    width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .dropdown-item-text {}
+  .dropdown-item-title {
+    font-size: .845rem; font-weight: 700; color: var(--navy); line-height: 1.2;
+  }
+  .dropdown-item-desc {
+    font-size: .73rem; color: var(--muted); margin-top: .15rem; line-height: 1.4;
+  }
+  /* Bottom promo strip */
+  .dropdown-promo {
+    margin-top: .85rem; padding: .85rem 1rem;
+    background: linear-gradient(135deg, rgba(30,144,255,.08), rgba(30,144,255,.04));
+    border: 1px solid rgba(30,144,255,.15); border-radius: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .dropdown-promo-text { font-size: .8rem; color: var(--navy); font-weight: 600; }
+  .dropdown-promo-text span { color: var(--sky); }
+  .dropdown-promo-btn {
+    font-size: .75rem; font-weight: 700; color: var(--sky);
+    background: none; border: 1.5px solid var(--sky); border-radius: 20px;
+    padding: .3rem .85rem; transition: all .2s; white-space: nowrap;
+  }
+  .dropdown-promo-btn:hover { background: var(--sky); color: white; }
+
+  /* ─── PAGE 2 – BOOKING FORM ────────────────────────────── */
+  #page2 { background: var(--bg); min-height: 100vh; }
+
+  /* Stepper */
+  .stepper-wrap { background: var(--white); border-bottom: 1px solid var(--border); padding: 1.5rem 2.5rem; }
+  .stepper { display: flex; align-items: center; justify-content: center; gap: 0; max-width: 680px; margin: 0 auto; }
+  .step { display: flex; flex-direction: column; align-items: center; position: relative; flex: 1; }
+  .step:not(:last-child)::after {
+    content: '';
+    position: absolute; top: 18px; left: 55%; width: 90%;
+    height: 2px; background: var(--border); z-index: 0;
+  }
+  .step.done:not(:last-child)::after,
+  .step.active:not(:last-child)::after { background: var(--sky); }
+  .step-circle {
+    width: 36px; height: 36px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    font-size: .8rem; font-weight: 700; color: var(--muted);
+    position: relative; z-index: 1; transition: all .3s;
+  }
+  .step.done .step-circle { background: var(--sky); border-color: var(--sky); color: var(--white); }
+  .step.active .step-circle { background: var(--sky); border-color: var(--sky); color: var(--white); box-shadow: 0 0 0 4px rgba(30,144,255,.18); }
+  .step-label { font-size: .7rem; font-weight: 600; color: var(--muted); margin-top: .45rem; white-space: nowrap; }
+  .step.active .step-label { color: var(--sky); }
+  .step.done .step-label { color: var(--sky); }
+
+  /* Booking Layout */
+  .booking-layout { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; padding: 2rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+
+  /* Form Sections */
+  .form-section {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.75rem; margin-bottom: 1.25rem;
+  }
+  .form-section-title {
+    font-size: 1rem; font-weight: 700; color: var(--navy);
+    display: flex; align-items: center; gap: .6rem; margin-bottom: 1.4rem;
+    padding-bottom: .9rem; border-bottom: 1px solid var(--border);
+  }
+  .form-section-icon {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(30,144,255,.1); display: flex; align-items: center; justify-content: center;
+    font-size: .95rem;
+  }
+  .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; }
+
+  /* Floating label inputs */
+  .field-wrap { position: relative; }
+  .field-wrap label {
+    position: absolute; top: 50%; left: 14px; transform: translateY(-50%);
+    font-size: .875rem; color: var(--muted); pointer-events: none;
+    transition: all .2s; background: var(--white); padding: 0 4px;
+  }
+  .field-wrap input:focus + label,
+  .field-wrap input:not(:placeholder-shown) + label,
+  .field-wrap select:focus + label,
+  .field-wrap select.has-value + label {
+    top: 0; font-size: .7rem; font-weight: 600; color: var(--sky);
+  }
+  .field-wrap input,
+  .field-wrap select {
+    width: 100%; padding: .85rem 1rem .7rem;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    font-size: .9rem; color: var(--text); outline: none;
+    transition: border-color .2s; background: var(--white);
+    appearance: none;
+  }
+  .field-wrap input:focus,
+  .field-wrap select:focus { border-color: var(--sky); }
+  .field-wrap input::placeholder { color: transparent; }
+  .field-wrap .select-arrow {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    pointer-events: none; color: var(--muted); font-size: .75rem;
+  }
+  .optional-tag { font-size: .65rem; font-weight: 600; color: var(--muted); background: var(--bg); padding: .1rem .3rem; border-radius: 4px; margin-left: auto; }
+
+  /* Checkbox */
+  .checkbox-row { display: flex; align-items: center; gap: .75rem; margin-top: .5rem; }
+  .checkbox-row input[type=checkbox] { width: 18px; height: 18px; accent-color: var(--sky); cursor: pointer; }
+  .checkbox-row label { font-size: .875rem; color: var(--text); cursor: pointer; }
+
+  /* Form Actions */
+  .form-actions { display: flex; justify-content: space-between; align-items: center; padding: 1.5rem 0; }
+  .btn-back {
+    padding: .75rem 1.5rem; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--white);
+    color: var(--text); font-size: .9rem; font-weight: 600;
+    display: flex; align-items: center; gap: .5rem; transition: all .2s;
+  }
+  .btn-back:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-primary {
+    padding: .85rem 2rem; border-radius: 10px;
+    background: var(--sky); color: var(--white);
+    font-size: .9rem; font-weight: 700; letter-spacing: .01em;
+    display: flex; align-items: center; gap: .5rem; transition: all .2s;
+  }
+  .btn-primary:hover { background: #0e7de0; transform: translateY(-1px); box-shadow: 0 4px 14px rgba(30,144,255,.35); }
+
+  /* Flight Summary Card */
+  .flight-summary-card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.5rem;
+    position: sticky; top: 80px; height: fit-content;
+  }
+  .summary-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem;
+  }
+  .summary-header h3 { font-size: .95rem; font-weight: 700; color: var(--navy); }
+  .summary-route { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; }
+  .summary-city { text-align: center; }
+  .summary-code { font-size: 2rem; font-weight: 900; color: var(--navy); line-height: 1; }
+  .summary-city-name { font-size: .72rem; color: var(--muted); margin-top: .2rem; }
+  .summary-time { font-size: .8rem; font-weight: 600; color: var(--navy); margin-top: .25rem; }
+  .summary-connector { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .3rem; padding: 0 .5rem; }
+  .summary-duration { font-size: .72rem; font-weight: 700; color: var(--muted); }
+  .summary-line { width: 100%; height: 1px; background: var(--border); position: relative; }
+  .summary-line::before, .summary-line::after {
+    content: ''; position: absolute; top: -3px;
+    width: 7px; height: 7px; border-radius: 50%; background: var(--border);
+  }
+  .summary-line::before { left: 0; }
+  .summary-line::after { right: 0; }
+  .summary-nonstop { font-size: .68rem; color: var(--green); font-weight: 600; }
+  .summary-details { display: grid; grid-template-columns: 1fr 1fr; gap: .6rem; margin-bottom: 1.25rem; }
+  .summary-detail { }
+  .summary-detail-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .06em; font-weight: 700; color: var(--muted); }
+  .summary-detail-value { font-size: .825rem; font-weight: 600; color: var(--navy); margin-top: .1rem; }
+  .summary-price-row {
+    background: var(--bg); border-radius: 10px; padding: 1rem;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .summary-price-label { font-size: .8rem; font-weight: 600; color: var(--muted); }
+  .summary-price { font-size: 1.6rem; font-weight: 900; color: var(--navy); }
+  .summary-price-sub { font-size: .68rem; color: var(--muted); margin-top: .15rem; }
+  .plane-icon-summary {
+    font-size: .9rem; color: var(--sky);
+    transform: rotate(90deg); display: block;
+  }
+
+  /* ─── PAGE 3 – CONFIRMATION ────────────────────────────── */
+  #page3 { background: var(--bg); min-height: 100vh; padding-bottom: 5rem; }
+  .confirm-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a4a7a 100%);
+    padding: 4rem 2.5rem 3rem; text-align: center;
+  }
+  .success-circle {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: rgba(16,185,129,.15); border: 3px solid rgba(16,185,129,.4);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 1.25rem; position: relative;
+  }
+  .success-circle::before {
+    content: '';
+    position: absolute; inset: -6px; border-radius: 50%;
+    background: rgba(16,185,129,.08);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.15); opacity: 0.5; }
+  }
+  .success-check { font-size: 2.5rem; }
+  .confirm-title { font-size: 2.2rem; font-weight: 900; color: var(--white); letter-spacing: -.03em; }
+  .confirm-sub { color: rgba(255,255,255,.7); font-size: 1rem; margin-top: .5rem; }
+  .booking-ref-card {
+    display: inline-block; margin-top: 1.5rem;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2);
+    border-radius: 12px; padding: .9rem 2rem;
+  }
+  .booking-ref-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .1em; font-weight: 700; color: rgba(255,255,255,.6); }
+  .booking-ref-num { font-size: 1.5rem; font-weight: 900; color: var(--gold); letter-spacing: .08em; margin-top: .2rem; font-family: monospace; }
+
+  /* Boarding Pass */
+  .boarding-section { max-width: 820px; margin: 2.5rem auto; padding: 0 2.5rem; }
+  .boarding-pass {
+    background: var(--white); border-radius: 16px;
+    box-shadow: 0 8px 40px rgba(10,37,64,.15);
+    overflow: hidden; display: flex; position: relative;
+  }
+  .bp-left { flex: 1; padding: 1.75rem; }
+  .bp-logo { display: flex; align-items: center; gap: .5rem; font-weight: 800; font-size: 1rem; color: var(--navy); margin-bottom: 1.5rem; }
+  .bp-logo svg { color: var(--sky); }
+  .bp-route { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+  .bp-airport { }
+  .bp-airport-code { font-size: 3rem; font-weight: 900; color: var(--navy); line-height: 1; letter-spacing: -.03em; }
+  .bp-airport-name { font-size: .75rem; color: var(--muted); margin-top: .2rem; }
+  .bp-connector { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .4rem; }
+  .bp-flight-line { width: 100%; display: flex; align-items: center; gap: .5rem; }
+  .bp-line { flex: 1; height: 1.5px; background: linear-gradient(90deg, var(--border), var(--sky), var(--border)); }
+  .bp-plane { font-size: 1.2rem; color: var(--sky); }
+  .bp-nonstop { font-size: .68rem; color: var(--green); font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+  .bp-duration { font-size: .75rem; color: var(--muted); font-weight: 600; }
+  .bp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+  .bp-field-label { font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--muted); }
+  .bp-field-value { font-size: .875rem; font-weight: 700; color: var(--navy); margin-top: .2rem; }
+  .bp-field-value.large { font-size: 1.1rem; }
+  .bp-divider {
+    width: 2px; background: var(--bg);
+    position: relative; flex-shrink: 0;
+  }
+  /* Perforated edge */
+  .bp-divider::before, .bp-divider::after {
+    content: '';
+    position: absolute; left: 50%; transform: translateX(-50%);
+    width: 24px; height: 24px; border-radius: 50%;
+    background: var(--bg);
+  }
+  .bp-divider::before { top: -12px; }
+  .bp-divider::after { bottom: -12px; }
+  .bp-divider-dots {
+    width: 100%; height: 100%;
+    background-image: repeating-linear-gradient(to bottom, var(--border) 0, var(--border) 5px, transparent 5px, transparent 12px);
+  }
+  .bp-right { width: 200px; padding: 1.75rem; display: flex; flex-direction: column; align-items: center; justify-content: space-between; }
+  .bp-passenger { text-align: center; margin-bottom: 1rem; }
+  .bp-passenger-label { font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; color: var(--muted); }
+  .bp-passenger-name { font-size: .9rem; font-weight: 800; color: var(--navy); margin-top: .2rem; }
+  .bp-seat-badge {
+    background: var(--navy); color: var(--white); border-radius: 10px;
+    padding: .5rem 1.2rem; text-align: center; margin-bottom: 1rem;
+  }
+  .bp-seat-label { font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.6); }
+  .bp-seat-num { font-size: 1.4rem; font-weight: 900; color: var(--gold); }
+  /* QR Code */
+  .qr-wrap { }
+  .qr-code {
+    width: 110px; height: 110px;
+    background: white; border: 1px solid var(--border); border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .qr-inner {
+    width: 100%; height: 100%;
+    background:
+      repeating-conic-gradient(#000 0% 25%, transparent 0% 50%) 0 0 / 8px 8px;
+    opacity: .85;
+    /* Mask to make it look like QR */
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='white'/%3E%3C/svg%3E");
+  }
+
+  /* Confirmation Details */
+  .confirm-details { max-width: 820px; margin: 0 auto; padding: 0 2.5rem 2rem; }
+  .confirm-details-card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.5rem; margin-bottom: 1.25rem;
+  }
+  .confirm-details-title { font-size: .875rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+  .confirm-detail-row { display: flex; justify-content: space-between; padding: .4rem 0; }
+  .confirm-detail-key { font-size: .825rem; color: var(--muted); }
+  .confirm-detail-val { font-size: .825rem; font-weight: 600; color: var(--navy); }
+
+  /* Action Buttons */
+  .action-buttons { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; }
+  .btn-outline {
+    padding: .8rem 1.5rem; border-radius: 10px;
+    border: 1.5px solid var(--border); background: var(--white);
+    color: var(--text); font-size: .875rem; font-weight: 600;
+    display: flex; align-items: center; gap: .5rem; transition: all .2s;
+  }
+  .btn-outline:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-ghost {
+    padding: .8rem 1.5rem; border-radius: 10px;
+    border: 1.5px solid var(--border); background: transparent;
+    color: var(--muted); font-size: .875rem; font-weight: 600;
+    display: flex; align-items: center; gap: .5rem; transition: all .2s;
+  }
+  .btn-ghost:hover { color: var(--text); border-color: var(--text); }
+
+  /* What's Next */
+  .whats-next { max-width: 820px; margin: 0 auto; padding: 0 2.5rem; }
+  .whats-next h3 { font-size: 1.1rem; font-weight: 700; color: var(--navy); margin-bottom: 1rem; }
+  .next-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1rem; }
+  .next-card {
+    background: var(--white); border-radius: var(--radius);
+    box-shadow: var(--shadow); padding: 1.25rem;
+    display: flex; align-items: flex-start; gap: .9rem;
+    transition: transform .2s, box-shadow .2s; cursor: pointer;
+  }
+  .next-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .next-icon {
+    width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+    background: linear-gradient(135deg, rgba(30,144,255,.12), rgba(30,144,255,.06));
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .next-title { font-size: .875rem; font-weight: 700; color: var(--navy); }
+  .next-desc { font-size: .775rem; color: var(--muted); margin-top: .25rem; line-height: 1.5; }
+
+  /* ─── PAGE 4 – MANAGE BOOKING ──────────────────────────── */
+  #page4 { background: var(--bg); min-height: 100vh; padding-bottom: 5rem; }
+
+  .mb-hero {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a4a7a 100%);
+    padding: 3.5rem 2.5rem 5rem; text-align: center; position: relative; overflow: hidden;
+  }
+  .mb-hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 60% at 60% 40%, rgba(30,144,255,.18) 0%, transparent 60%);
+  }
+  .mb-hero-tag {
+    display: inline-flex; align-items: center; gap: .4rem;
+    background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.18);
+    border-radius: 20px; padding: .3rem .9rem;
+    font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.85);
+    letter-spacing: .04em; text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .mb-hero h1 {
+    font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 900;
+    color: var(--white); letter-spacing: -.03em; margin-bottom: .6rem;
+  }
+  .mb-hero p { color: rgba(255,255,255,.72); font-size: 1rem; }
+
+  /* Lookup card floats over the hero */
+  .mb-lookup-wrap {
+    max-width: 680px; margin: -3rem auto 0; padding: 0 1.5rem; position: relative; z-index: 10;
+  }
+  .mb-lookup-card {
+    background: var(--white); border-radius: 18px;
+    box-shadow: 0 8px 40px rgba(10,37,64,.16);
+    padding: 2rem 2rem 1.75rem;
+  }
+  .mb-lookup-title {
+    font-size: 1rem; font-weight: 700; color: var(--navy);
+    margin-bottom: 1.4rem; display: flex; align-items: center; gap: .5rem;
+  }
+  .mb-lookup-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;
+  }
+  .mb-field { display: flex; flex-direction: column; gap: .4rem; }
+  .mb-field label {
+    font-size: .7rem; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: .06em;
+  }
+  .mb-field input {
+    padding: .75rem 1rem; border: 1.5px solid var(--border);
+    border-radius: 10px; font-size: .9rem; font-weight: 600; color: var(--navy);
+    outline: none; transition: border-color .2s; background: var(--white);
+    font-family: inherit;
+  }
+  .mb-field input:focus { border-color: var(--sky); }
+  .mb-field input::placeholder { color: var(--border); font-weight: 400; }
+  .mb-ref-hint {
+    font-size: .75rem; color: var(--muted); margin-bottom: 1.25rem;
+    display: flex; align-items: center; gap: .3rem;
+  }
+  .btn-find {
+    width: 100%; padding: .88rem; border-radius: 12px;
+    background: var(--sky); color: var(--white);
+    font-size: .975rem; font-weight: 700; letter-spacing: .01em;
+    display: flex; align-items: center; justify-content: center; gap: .5rem;
+    transition: all .2s;
+  }
+  .btn-find:hover { background: #0e7de0; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(30,144,255,.35); }
+  .mb-divider {
+    display: flex; align-items: center; gap: .75rem; margin: 1.1rem 0;
+    color: var(--muted); font-size: .75rem;
+  }
+  .mb-divider::before, .mb-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* Result section */
+  .mb-result { max-width: 860px; margin: 2.5rem auto 0; padding: 0 1.5rem; display: none; }
+  .mb-result.visible { display: block; }
+
+  .mb-booking-card {
+    background: var(--white); border-radius: 16px;
+    box-shadow: var(--shadow); overflow: hidden; margin-bottom: 1.5rem;
+  }
+  .mb-booking-header {
+    background: linear-gradient(135deg, var(--navy), #1a4a7a);
+    padding: 1.25rem 1.75rem;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .mb-booking-ref { }
+  .mb-ref-label { font-size: .68rem; font-weight: 700; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .08em; }
+  .mb-ref-code { font-size: 1.5rem; font-weight: 900; color: var(--gold); font-family: monospace; letter-spacing: .08em; }
+  .mb-status-badge {
+    display: flex; align-items: center; gap: .4rem;
+    background: rgba(16,185,129,.2); border: 1px solid rgba(16,185,129,.35);
+    border-radius: 20px; padding: .35rem .9rem;
+    font-size: .8rem; font-weight: 700; color: #34d399;
+  }
+  .mb-status-dot { width: 7px; height: 7px; border-radius: 50%; background: #34d399; }
+
+  .mb-route-strip {
+    padding: 1.5rem 1.75rem;
+    display: flex; align-items: center; gap: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .mb-airport { }
+  .mb-airport-code { font-size: 2.6rem; font-weight: 900; color: var(--navy); line-height: 1; letter-spacing: -.03em; }
+  .mb-airport-city { font-size: .78rem; color: var(--muted); margin-top: .15rem; }
+  .mb-airport-time { font-size: .875rem; font-weight: 700; color: var(--navy); margin-top: .2rem; }
+  .mb-connector { flex: 1; display: flex; flex-direction: column; align-items: center; gap: .3rem; }
+  .mb-flight-line { width: 100%; display: flex; align-items: center; gap: .4rem; }
+  .mb-fl { flex: 1; height: 1.5px; background: linear-gradient(90deg, var(--border), var(--sky), var(--border)); }
+  .mb-plane-icon { font-size: 1.15rem; color: var(--sky); }
+  .mb-duration { font-size: .72rem; font-weight: 700; color: var(--muted); }
+  .mb-nonstop { font-size: .68rem; font-weight: 700; color: var(--green); text-transform: uppercase; letter-spacing: .04em; }
+
+  .mb-details-grid {
+    display: grid; grid-template-columns: repeat(4,1fr); gap: 0;
+    padding: 1.1rem 1.75rem;
+  }
+  .mb-detail { padding: .4rem .5rem; }
+  .mb-detail-label { font-size: .65rem; text-transform: uppercase; letter-spacing: .07em; font-weight: 700; color: var(--muted); }
+  .mb-detail-value { font-size: .875rem; font-weight: 700; color: var(--navy); margin-top: .2rem; }
+
+  /* Action cards grid */
+  .mb-actions-title { font-size: 1rem; font-weight: 800; color: var(--navy); margin-bottom: 1rem; }
+  .mb-actions-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 2rem;
+  }
+  .mb-action-card {
+    background: var(--white); border-radius: 14px;
+    box-shadow: var(--shadow); padding: 1.3rem 1.25rem;
+    display: flex; flex-direction: column; gap: .6rem;
+    border: 1.5px solid transparent;
+    transition: all .22s; cursor: pointer;
+  }
+  .mb-action-card:hover { border-color: var(--sky); transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+  .mb-action-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+  }
+  .mb-action-name { font-size: .9rem; font-weight: 700; color: var(--navy); }
+  .mb-action-desc { font-size: .775rem; color: var(--muted); line-height: 1.45; }
+  .mb-action-arrow { font-size: .8rem; color: var(--sky); font-weight: 700; margin-top: auto; }
+
+  /* Not-found state */
+  .mb-not-found {
+    max-width: 440px; margin: 2.5rem auto 0; padding: 0 1.5rem; text-align: center; display: none;
+  }
+  .mb-not-found.visible { display: block; }
+  .mb-nf-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .mb-nf-title { font-size: 1.1rem; font-weight: 800; color: var(--navy); margin-bottom: .5rem; }
+  .mb-nf-desc { font-size: .875rem; color: var(--muted); line-height: 1.6; }
+
+  /* ─── UTILITIES ─────────────────────────────────────────── */
+  .mt-1 { margin-top: .5rem; }
+  .mt-2 { margin-top: 1rem; }
+  .full-col { grid-column: 1 / -1; }
+  .text-center { text-align: center; }
+
+  /* ─── AIRPORT AUTOCOMPLETE DROPDOWN ────────────────────── */
+  .search-field { position: relative; }
+  .airport-dropdown {
+    position: fixed; min-width: 260px;
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: 12px; box-shadow: var(--shadow-lg);
+    max-height: 240px; overflow-y: auto; z-index: 9999;
+    display: none;
+  }
+  .airport-dropdown.open { display: block; }
+  .airport-option {
+    padding: .6rem 1rem; cursor: pointer;
+    border-bottom: 1px solid var(--border); transition: background .15s;
+  }
+  .airport-option:last-child { border-bottom: none; }
+  .airport-option:hover, .airport-option:focus { background: rgba(30,144,255,.07); outline: none; }
+  .apt-row { display: flex; align-items: center; gap: .55rem; }
+  .apt-iata { font-size: .78rem; font-weight: 800; color: var(--sky); min-width: 34px; }
+  .apt-city { font-size: .85rem; font-weight: 600; color: var(--text); }
+  .apt-name { font-size: .72rem; color: var(--muted); margin-top: .1rem; }
+
+  /* ─── DATE INPUT ────────────────────────────────────────── */
+  .search-field input[type="date"] {
+    border: none; outline: none; font-size: .95rem; font-weight: 600;
+    color: var(--navy); background: transparent; width: 100%; cursor: pointer;
+  }
+  .search-field input[type="date"]::-webkit-calendar-picker-indicator {
+    cursor: pointer; opacity: .55;
+  }
+
+  /* ─── PASSENGERS & CLASS PANEL ──────────────────────────── */
+  .pax-field { cursor: pointer; user-select: none; }
+  .pax-display { font-size: .95rem; font-weight: 600; color: var(--navy); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .pax-panel {
+    position: fixed;
+    width: 290px; background: var(--white);
+    border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: var(--shadow-lg); z-index: 9999;
+    padding: 1rem 1.1rem; display: none;
+  }
+  .pax-panel.open { display: block; }
+  .pax-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: .6rem 0; border-bottom: 1px solid var(--border);
+  }
+  .pax-row:last-of-type { border-bottom: none; }
+  .pax-label { font-size: .875rem; font-weight: 600; color: var(--navy); }
+  .pax-sub { font-size: .7rem; color: var(--muted); margin-top: .1rem; }
+  .pax-counter { display: flex; align-items: center; gap: .7rem; }
+  .pax-btn {
+    width: 28px; height: 28px; border-radius: 50%;
+    border: 1.5px solid var(--border); background: var(--white);
+    font-size: 1.15rem; font-weight: 700; color: var(--navy);
+    display: flex; align-items: center; justify-content: center;
+    transition: all .2s; line-height: 1;
+  }
+  .pax-btn:hover:not(:disabled) { border-color: var(--sky); color: var(--sky); background: rgba(30,144,255,.06); }
+  .pax-btn:disabled { opacity: .3; cursor: not-allowed; }
+  .pax-num { font-size: .95rem; font-weight: 700; color: var(--navy); min-width: 16px; text-align: center; }
+  .class-section { padding-top: .75rem; }
+  .class-title { font-size: .68rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: .07em; margin-bottom: .6rem; }
+  .class-options { display: flex; gap: .45rem; }
+  .class-btn {
+    flex: 1; padding: .38rem .5rem; border-radius: 20px;
+    border: 1.5px solid var(--border); background: var(--white);
+    font-size: .78rem; font-weight: 600; color: var(--muted);
+    transition: all .2s; cursor: pointer; text-align: center;
+  }
+  .class-btn.selected { border-color: var(--sky); background: rgba(30,144,255,.09); color: var(--sky); }
+  .pax-done-btn {
+    width: 100%; margin-top: .85rem; padding: .58rem;
+    background: var(--sky); color: var(--white); border-radius: 8px;
+    font-size: .875rem; font-weight: 700; transition: background .2s;
+  }
+  .pax-done-btn:hover { background: #0e7de0; }
+
+  /* QR grid pattern override */
+  .qr-grid {
+    width: 108px; height: 108px;
+    display: grid; grid-template-columns: repeat(11, 1fr); gap: 1px;
+    background: var(--border); padding: 4px; border-radius: 4px;
+  }
+  .qr-cell { background: white; border-radius: 1px; }
+  .qr-cell.b { background: #111; }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════ PAGE 1 ═══════════════════════════════ -->
+<div id="page1" class="page active">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/>
+      </svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a class="active" onclick="showPage(1)">Home</a></li>
+      <li><a onclick="showPage(2)">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Meals & Dining</div>
+                <div class="dropdown-item-desc">Pre-order your in-flight meal from our chef-crafted menus</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,193,7,.12);">🥂</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Food & Drinks</div>
+                <div class="dropdown-item-desc">Browse cocktails, wines, soft drinks & snacks available on board</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Entertainment</div>
+                <div class="dropdown-item-desc">300+ movies, live TV, music & games on your personal screen</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">WiFi & Connectivity</div>
+                <div class="dropdown-item-desc">High-speed internet plans from $9.99 — stay connected at 35,000 ft</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(139,92,246,.12);">🛍️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Duty Free Shopping</div>
+                <div class="dropdown-item-desc">Exclusive fragrances, luxury goods & gifts delivered to your seat</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Comfort & Amenities</div>
+                <div class="dropdown-item-desc">Pillows, blankets, noise-cancelling headsets & premium toiletry kits</div>
+              </div>
+            </a>
+          </div>
+          <div class="dropdown-promo">
+            <div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals up to 48 hrs before departure & save 15%</div>
+            <button class="dropdown-promo-btn">Order Now</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-sunset"></div>
+    <div class="hero-inner">
+      <h1 class="hero-headline">Your <span>Dream Journey</span><br>Starts Here</h1>
+      <p class="hero-sub">Book flights, choose seats, and enjoy premium in-flight experiences</p>
+
+      <!-- Search Widget -->
+      <div class="search-widget">
+        <div class="trip-tabs">
+          <button class="trip-tab active" onclick="setTab(this)">Round-trip</button>
+          <button class="trip-tab" onclick="setTab(this)">One-way</button>
+          <button class="trip-tab" onclick="setTab(this)">Multi-city</button>
+        </div>
+        <div class="search-form">
+          <!-- FROM -->
+          <div class="search-field">
+            <label>From</label>
+            <input type="text" id="from-input" value="Sydney (SYD)" autocomplete="off"
+              placeholder="City or airport"
+              oninput="filterAirports(this,'from-drop')"
+              onfocus="openAirportDrop('from-drop',this)"
+            />
+            <div id="from-drop" class="airport-dropdown"></div>
+          </div>
+
+          <!-- SWAP -->
+          <button class="swap-btn" title="Swap cities" onclick="swapCities()">⇄</button>
+
+          <!-- TO -->
+          <div class="search-field">
+            <label>To</label>
+            <input type="text" id="to-input" autocomplete="off"
+              placeholder="Where to?"
+              oninput="filterAirports(this,'to-drop')"
+              onfocus="openAirportDrop('to-drop',this)"
+            />
+            <div id="to-drop" class="airport-dropdown"></div>
+          </div>
+
+          <!-- DEPARTURE -->
+          <div class="search-field">
+            <label>Departure</label>
+            <input type="date" id="departure-date" value="2026-10-12" />
+          </div>
+
+          <!-- RETURN -->
+          <div class="search-field">
+            <label>Return</label>
+            <input type="date" id="return-date" value="2026-10-19" />
+          </div>
+
+          <!-- PASSENGERS & CLASS -->
+          <div class="search-field pax-field" onclick="togglePaxPanel(event)">
+            <label>Passengers &amp; Class</label>
+            <div class="pax-display" id="pax-display">1 Adult, Economy</div>
+            <div class="pax-panel" id="pax-panel" onclick="event.stopPropagation()">
+              <div class="pax-row">
+                <div><div class="pax-label">Adults</div><div class="pax-sub">Age 12+</div></div>
+                <div class="pax-counter">
+                  <button class="pax-btn" id="adults-minus" onclick="changePax('adults',-1)">−</button>
+                  <span class="pax-num" id="adults-count">1</span>
+                  <button class="pax-btn" onclick="changePax('adults',1)">+</button>
+                </div>
+              </div>
+              <div class="pax-row">
+                <div><div class="pax-label">Children</div><div class="pax-sub">Age 2–11</div></div>
+                <div class="pax-counter">
+                  <button class="pax-btn" id="children-minus" onclick="changePax('children',-1)">−</button>
+                  <span class="pax-num" id="children-count">0</span>
+                  <button class="pax-btn" onclick="changePax('children',1)">+</button>
+                </div>
+              </div>
+              <div class="pax-row">
+                <div><div class="pax-label">Infants</div><div class="pax-sub">Under 2</div></div>
+                <div class="pax-counter">
+                  <button class="pax-btn" id="infants-minus" onclick="changePax('infants',-1)">−</button>
+                  <span class="pax-num" id="infants-count">0</span>
+                  <button class="pax-btn" onclick="changePax('infants',1)">+</button>
+                </div>
+              </div>
+              <div class="class-section">
+                <div class="class-title">Cabin Class</div>
+                <div class="class-options">
+                  <button class="class-btn selected" onclick="selectClass(this,'Economy')">Economy</button>
+                  <button class="class-btn" onclick="selectClass(this,'Business')">Business</button>
+                  <button class="class-btn" onclick="selectClass(this,'First')">First</button>
+                </div>
+              </div>
+              <button class="pax-done-btn" onclick="closePaxPanel()">Done</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Search action bar — separated row at the bottom -->
+        <div class="search-action-bar">
+          <div class="search-action-hints">
+            <div class="search-hint"><span>✈</span> Best price guarantee</div>
+            <div class="search-hint"><span>🔒</span> Secure booking</div>
+            <div class="search-hint"><span>↩</span> Free cancellation on select fares</div>
+          </div>
+          <button class="btn-search" onclick="showPage(2)">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            Search Flights
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Destinations -->
+  <section class="section" style="background: var(--bg);">
+    <div class="section-header">
+      <div>
+        <h2 class="section-title">Popular Destinations</h2>
+        <p class="section-sub">Discover our most sought-after routes for your next getaway.</p>
+      </div>
+      <a class="link-view-all">View All Destinations →</a>
+    </div>
+    <div class="dest-grid">
+
+      <!-- Tokyo -->
+      <div class="dest-card" onclick="showPage(2)">
+        <div class="dest-img" style="
+          background-image: url('https://images.unsplash.com/photo-1540959733332-eab4deabeeaf?w=600&q=85&fit=crop&crop=center');
+          background-size: cover; background-position: center;">
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">Tokyo</div>
+          <div class="dest-country">Japan</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$899</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Paris -->
+      <div class="dest-card" onclick="showPage(2)">
+        <div class="dest-img" style="
+          background-image: url('https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=600&q=85&fit=crop&crop=center');
+          background-size: cover; background-position: center;">
+          <div class="dest-badge">RECOMMENDED</div>
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">Paris</div>
+          <div class="dest-country">France</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$599</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dubai -->
+      <div class="dest-card" onclick="showPage(2)">
+        <div class="dest-img" style="
+          background-image: url('https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=600&q=85&fit=crop&crop=center');
+          background-size: cover; background-position: center;">
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">Dubai</div>
+          <div class="dest-country">United Arab Emirates</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$749</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- London -->
+      <div class="dest-card" onclick="showPage(2)">
+        <div class="dest-img" style="
+          background-image: url('https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?w=600&q=85&fit=crop&crop=center');
+          background-size: cover; background-position: center;">
+          <div class="dest-img-overlay"></div>
+        </div>
+        <div class="dest-info">
+          <div class="dest-city">London</div>
+          <div class="dest-country">United Kingdom</div>
+          <div class="dest-price-row">
+            <span class="dest-from">ECONOMY FROM</span>
+            <span class="dest-price">$649</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Why Fly -->
+  <section class="why-section">
+    <h2 class="section-title">Why Fly with Us</h2>
+    <p class="section-sub" style="margin-top:.4rem;">Experience the perfect blend of efficiency, reliability, and luxury in every journey.</p>
+    <div class="why-grid" style="margin-top:2.5rem;">
+      <div class="why-card">
+        <div class="why-icon">📅</div>
+        <div class="why-title">Flexible Booking</div>
+        <div class="why-desc">Change or cancel your flights with minimal hassle. We understand that plans evolve, and our policies are designed to accommodate your busy lifestyle.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🍽️</div>
+        <div class="why-title">Premium In-Flight Dining</div>
+        <div class="why-desc">Savor exquisite meals curated by world-class chefs, paired with fine wines and impeccable service, even at 35,000 feet.</div>
+      </div>
+      <div class="why-card">
+        <div class="why-icon">🏆</div>
+        <div class="why-title">Frequent Flyer Rewards</div>
+        <div class="why-desc">Earn miles on every journey and unlock exclusive benefits, including lounge access, priority boarding, and complimentary upgrades.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          FlyDreamAir
+        </h3>
+        <p>Experience the world with premium comfort and unmatched reliability. Your journey is our passion.</p>
+        <div class="social-icons" style="margin-top:1rem;">
+          <div class="social-icon">f</div>
+          <div class="social-icon">𝕏</div>
+          <div class="social-icon">in</div>
+          <div class="social-icon">▶</div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <ul>
+          <li><a>About Us</a></li>
+          <li><a>Careers</a></li>
+          <li><a>Press Room</a></li>
+          <li><a>Sustainability</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Support</h4>
+        <ul>
+          <li><a>Help Center</a></li>
+          <li><a>Contact Us</a></li>
+          <li><a>Flight Status</a></li>
+          <li><a>Baggage Info</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Legal</h4>
+        <ul>
+          <li><a>Privacy Policy</a></li>
+          <li><a>Terms of Service</a></li>
+          <li><a>Cookie Settings</a></li>
+          <li><a>Accessibility</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 FlyDreamAir. Effortless Ascension.</p>
+      <p>✈ Fly smarter. Fly further.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════ PAGE 2 ═══════════════════════════════ -->
+<div id="page2" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a class="active" onclick="showPage(2)">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Meals & Dining</div>
+                <div class="dropdown-item-desc">Pre-order your in-flight meal from our chef-crafted menus</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,193,7,.12);">🥂</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Food & Drinks</div>
+                <div class="dropdown-item-desc">Browse cocktails, wines, soft drinks & snacks available on board</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Entertainment</div>
+                <div class="dropdown-item-desc">300+ movies, live TV, music & games on your personal screen</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">WiFi & Connectivity</div>
+                <div class="dropdown-item-desc">High-speed internet plans from $9.99 — stay connected at 35,000 ft</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(139,92,246,.12);">🛍️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Duty Free Shopping</div>
+                <div class="dropdown-item-desc">Exclusive fragrances, luxury goods & gifts delivered to your seat</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Comfort & Amenities</div>
+                <div class="dropdown-item-desc">Pillows, blankets, noise-cancelling headsets & premium toiletry kits</div>
+              </div>
+            </a>
+          </div>
+          <div class="dropdown-promo">
+            <div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals up to 48 hrs before departure & save 15%</div>
+            <button class="dropdown-promo-btn">Order Now</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Stepper -->
+  <div class="stepper-wrap">
+    <div class="stepper">
+      <div class="step done">
+        <div class="step-circle">✓</div>
+        <div class="step-label">Flight Selection</div>
+      </div>
+      <div class="step active">
+        <div class="step-circle">2</div>
+        <div class="step-label">Passenger Details</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">3</div>
+        <div class="step-label">Seat &amp; Services</div>
+      </div>
+      <div class="step">
+        <div class="step-circle">4</div>
+        <div class="step-label">Confirmation</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Booking Layout -->
+  <div class="booking-layout">
+    <!-- LEFT: Forms -->
+    <div>
+      <h1 style="font-size:1.6rem;font-weight:800;color:var(--navy);margin-bottom:.4rem;">Passenger Details</h1>
+      <p style="font-size:.875rem;color:var(--muted);margin-bottom:1.5rem;">Please ensure the names match exactly as they appear on your government-issued ID.</p>
+
+      <!-- Contact Info -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <div class="form-section-icon">📧</div>
+          Contact Information
+        </div>
+        <p style="font-size:.8rem;color:var(--muted);margin-bottom:1.2rem;">Your booking confirmation and updates will be sent here.</p>
+        <div class="form-grid-2">
+          <div class="field-wrap">
+            <input type="email" placeholder=" " id="email"/>
+            <label for="email">Email Address</label>
+          </div>
+          <div class="field-wrap">
+            <input type="tel" placeholder=" " id="phone"/>
+            <label for="phone">Phone Number</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Passenger Details -->
+      <div class="form-section" style="border-top: 3px solid var(--gold);">
+        <div class="form-section-title">
+          <div class="form-section-icon">👤</div>
+          Passenger 1 (Adult)
+        </div>
+        <div class="form-grid-3" style="margin-bottom:1rem;">
+          <div class="field-wrap">
+            <select id="title" onchange="this.classList.add('has-value')">
+              <option value=""></option>
+              <option>Mr</option>
+              <option>Mrs</option>
+              <option>Ms</option>
+              <option>Dr</option>
+            </select>
+            <label for="title">Title</label>
+            <span class="select-arrow">▾</span>
+          </div>
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="fname"/>
+            <label for="fname">First Name</label>
+          </div>
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="lname"/>
+            <label for="lname">Last Name</label>
+          </div>
+        </div>
+        <div class="form-grid-2" style="margin-bottom:1rem;">
+          <div class="field-wrap">
+            <input type="date" placeholder=" " id="dob"/>
+            <label for="dob" style="top:0;font-size:.7rem;font-weight:600;color:var(--sky);">Date of Birth</label>
+          </div>
+          <div class="field-wrap">
+            <select id="gender" onchange="this.classList.add('has-value')">
+              <option value=""></option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Other</option>
+              <option>Prefer not to say</option>
+            </select>
+            <label for="gender">Gender</label>
+            <span class="select-arrow">▾</span>
+          </div>
+        </div>
+        <div class="form-grid-2" style="margin-bottom:1rem;">
+          <div class="field-wrap">
+            <select id="nationality" onchange="this.classList.add('has-value')">
+              <option value=""></option>
+              <option>American</option>
+              <option>British</option>
+              <option>Canadian</option>
+              <option>Australian</option>
+              <option>Japanese</option>
+              <option>French</option>
+              <option>German</option>
+              <option>Other</option>
+            </select>
+            <label for="nationality">Nationality</label>
+            <span class="select-arrow">▾</span>
+          </div>
+          <div class="field-wrap">
+            <input type="text" placeholder=" " id="passport"/>
+            <label for="passport">Passport Number (Optional)</label>
+          </div>
+        </div>
+        <div class="field-wrap">
+          <input type="text" placeholder=" " id="ffn"/>
+          <label for="ffn">Frequent Flyer Number (Optional)</label>
+        </div>
+      </div>
+
+      <!-- Special Requests -->
+      <div class="form-section">
+        <div class="form-section-title">
+          <div class="form-section-icon">🍽️</div>
+          Special Requests
+          <span class="optional-tag">Optional</span>
+        </div>
+        <div class="field-wrap" style="max-width:320px;margin-bottom:1rem;">
+          <select id="meal" onchange="this.classList.add('has-value')">
+            <option value=""></option>
+            <option>Standard</option>
+            <option>Vegetarian</option>
+            <option>Vegan</option>
+            <option>Halal</option>
+            <option>Kosher</option>
+            <option>Gluten-Free</option>
+          </select>
+          <label for="meal">Meal Preference</label>
+          <span class="select-arrow">▾</span>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="wheelchair"/>
+          <label for="wheelchair">I require special assistance (wheelchair, etc.)</label>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="form-actions">
+        <button class="btn-back" onclick="showPage(1)">← Back</button>
+        <button class="btn-primary" onclick="showPage(3)">Save &amp; Continue →</button>
+      </div>
+    </div>
+
+    <!-- RIGHT: Flight Summary -->
+    <div>
+      <div class="flight-summary-card">
+        <div class="summary-header">
+          <h3>Your Flight</h3>
+          <span class="plane-icon-summary">✈</span>
+        </div>
+        <div class="summary-route">
+          <div class="summary-city">
+            <div class="summary-code">JFK</div>
+            <div class="summary-city-name">New York</div>
+            <div class="summary-time">08:30 AM</div>
+          </div>
+          <div class="summary-connector">
+            <div class="summary-duration">7h 45m</div>
+            <div class="summary-line"></div>
+            <div class="summary-nonstop">✈ Non-stop</div>
+          </div>
+          <div class="summary-city" style="text-align:right;">
+            <div class="summary-code">LHR</div>
+            <div class="summary-city-name">London</div>
+            <div class="summary-time">09:15 PM</div>
+          </div>
+        </div>
+        <div class="summary-details">
+          <div class="summary-detail">
+            <div class="summary-detail-label">Date</div>
+            <div class="summary-detail-value">Oct 24, 2024</div>
+          </div>
+          <div class="summary-detail">
+            <div class="summary-detail-label">Flight Number</div>
+            <div class="summary-detail-value">FD 402</div>
+          </div>
+          <div class="summary-detail">
+            <div class="summary-detail-label">Class</div>
+            <div class="summary-detail-value">Economy</div>
+          </div>
+          <div class="summary-detail">
+            <div class="summary-detail-label">Passengers</div>
+            <div class="summary-detail-value">1 Adult</div>
+          </div>
+        </div>
+        <div class="summary-price-row">
+          <div>
+            <div class="summary-price-label">Total Price</div>
+            <div class="summary-price-sub">Includes taxes and fees</div>
+          </div>
+          <div style="text-align:right;">
+            <div class="summary-price">$845.00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer compact -->
+  <footer style="margin-top:3rem;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          FlyDreamAir
+        </h3>
+      </div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col">
+        <h4>Contact Us</h4>
+        <ul><li><a>Support</a></li></ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 FlyDreamAir. Effortless Ascension.</p>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════ PAGE 3 ═══════════════════════════════ -->
+<div id="page3" class="page">
+
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a onclick="showPage(2)">Book a Flight</a></li>
+      <li><a onclick="showPage(4)">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Meals & Dining</div>
+                <div class="dropdown-item-desc">Pre-order your in-flight meal from our chef-crafted menus</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,193,7,.12);">🥂</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Food & Drinks</div>
+                <div class="dropdown-item-desc">Browse cocktails, wines, soft drinks & snacks available on board</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Entertainment</div>
+                <div class="dropdown-item-desc">300+ movies, live TV, music & games on your personal screen</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">WiFi & Connectivity</div>
+                <div class="dropdown-item-desc">High-speed internet plans from $9.99 — stay connected at 35,000 ft</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(139,92,246,.12);">🛍️</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Duty Free Shopping</div>
+                <div class="dropdown-item-desc">Exclusive fragrances, luxury goods & gifts delivered to your seat</div>
+              </div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div>
+              <div class="dropdown-item-text">
+                <div class="dropdown-item-title">Comfort & Amenities</div>
+                <div class="dropdown-item-desc">Pillows, blankets, noise-cancelling headsets & premium toiletry kits</div>
+              </div>
+            </a>
+          </div>
+          <div class="dropdown-promo">
+            <div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals up to 48 hrs before departure & save 15%</div>
+            <button class="dropdown-promo-btn">Order Now</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Stepper -->
+  <div class="stepper-wrap">
+    <div class="stepper">
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Flight Selection</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Passenger Details</div></div>
+      <div class="step done"><div class="step-circle">✓</div><div class="step-label">Seat &amp; Services</div></div>
+      <div class="step active"><div class="step-circle">4</div><div class="step-label">Confirmation</div></div>
+    </div>
+  </div>
+
+  <!-- Success Hero -->
+  <div class="confirm-hero">
+    <div class="success-circle">
+      <span class="success-check">✅</span>
+    </div>
+    <h1 class="confirm-title">Booking Confirmed!</h1>
+    <p class="confirm-sub">Your reservation has been successfully processed</p>
+    <div class="booking-ref-card">
+      <div class="booking-ref-label">Booking Reference</div>
+      <div class="booking-ref-num">FDA-7X9K2P</div>
+    </div>
+  </div>
+
+  <!-- Boarding Pass -->
+  <div class="boarding-section">
+    <div class="boarding-pass">
+      <!-- Left side -->
+      <div class="bp-left">
+        <div class="bp-logo">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="#1E90FF"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          FlyDreamAir
+        </div>
+        <div class="bp-route">
+          <div class="bp-airport">
+            <div class="bp-airport-code">JFK</div>
+            <div class="bp-airport-name">New York</div>
+          </div>
+          <div class="bp-connector">
+            <div class="bp-flight-line">
+              <div class="bp-line"></div>
+              <div class="bp-plane">✈</div>
+              <div class="bp-line"></div>
+            </div>
+            <div class="bp-nonstop">Non-stop</div>
+            <div class="bp-duration">7h 45m</div>
+          </div>
+          <div class="bp-airport" style="text-align:right;">
+            <div class="bp-airport-code">LHR</div>
+            <div class="bp-airport-name">London Heathrow</div>
+          </div>
+        </div>
+        <div class="bp-grid">
+          <div>
+            <div class="bp-field-label">Passenger</div>
+            <div class="bp-field-value">John A. Smith</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Date</div>
+            <div class="bp-field-value">24 Oct 2024</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Departure</div>
+            <div class="bp-field-value large">08:30</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Boarding</div>
+            <div class="bp-field-value large">08:00</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Flight</div>
+            <div class="bp-field-value">FD 402</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Class</div>
+            <div class="bp-field-value">Economy</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Gate</div>
+            <div class="bp-field-value large">B24</div>
+          </div>
+          <div>
+            <div class="bp-field-label">Terminal</div>
+            <div class="bp-field-value large">T4</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Perforated divider -->
+      <div class="bp-divider">
+        <div class="bp-divider-dots"></div>
+      </div>
+
+      <!-- Right side -->
+      <div class="bp-right">
+        <div class="bp-passenger">
+          <div class="bp-passenger-label">Passenger</div>
+          <div class="bp-passenger-name">John A. Smith</div>
+        </div>
+        <div class="bp-seat-badge">
+          <div class="bp-seat-label">Seat</div>
+          <div class="bp-seat-num">22A</div>
+        </div>
+        <!-- QR Code (CSS-drawn) -->
+        <div class="qr-wrap">
+          <svg width="110" height="110" viewBox="0 0 110 110" xmlns="http://www.w3.org/2000/svg">
+            <rect width="110" height="110" rx="6" fill="white" stroke="#E2E8F0" stroke-width="1"/>
+            <!-- Top-left finder -->
+            <rect x="8" y="8" width="28" height="28" rx="2" fill="#0A2540"/>
+            <rect x="12" y="12" width="20" height="20" rx="1" fill="white"/>
+            <rect x="16" y="16" width="12" height="12" rx="1" fill="#0A2540"/>
+            <!-- Top-right finder -->
+            <rect x="74" y="8" width="28" height="28" rx="2" fill="#0A2540"/>
+            <rect x="78" y="12" width="20" height="20" rx="1" fill="white"/>
+            <rect x="82" y="16" width="12" height="12" rx="1" fill="#0A2540"/>
+            <!-- Bottom-left finder -->
+            <rect x="8" y="74" width="28" height="28" rx="2" fill="#0A2540"/>
+            <rect x="12" y="78" width="20" height="20" rx="1" fill="white"/>
+            <rect x="16" y="82" width="12" height="12" rx="1" fill="#0A2540"/>
+            <!-- Data dots (random-looking pattern) -->
+            <rect x="44" y="8" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="8" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="8" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="16" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="16" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="24" width="4" height="4" fill="#0A2540"/>
+            <rect x="8" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="16" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="24" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="8" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="24" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="16" y="60" width="4" height="4" fill="#0A2540"/>
+            <rect x="24" y="60" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="68" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="60" width="4" height="4" fill="#0A2540"/>
+            <rect x="68" y="60" width="4" height="4" fill="#0A2540"/>
+            <rect x="76" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="84" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="92" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="98" y="44" width="4" height="4" fill="#0A2540"/>
+            <rect x="76" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="92" y="52" width="4" height="4" fill="#0A2540"/>
+            <rect x="84" y="60" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="68" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="52" y="84" width="4" height="4" fill="#0A2540"/>
+            <rect x="68" y="84" width="4" height="4" fill="#0A2540"/>
+            <rect x="44" y="92" width="4" height="4" fill="#0A2540"/>
+            <rect x="60" y="92" width="4" height="4" fill="#0A2540"/>
+            <rect x="76" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="84" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="92" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="98" y="76" width="4" height="4" fill="#0A2540"/>
+            <rect x="76" y="84" width="4" height="4" fill="#0A2540"/>
+            <rect x="98" y="84" width="4" height="4" fill="#0A2540"/>
+            <rect x="84" y="92" width="4" height="4" fill="#0A2540"/>
+            <rect x="92" y="92" width="4" height="4" fill="#0A2540"/>
+          </svg>
+          <div style="font-size:.6rem;color:var(--muted);text-align:center;margin-top:.3rem;">Scan to board</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation Details -->
+  <div class="confirm-details">
+    <div class="confirm-details-card">
+      <div class="confirm-details-title">Payment &amp; Ticket Summary</div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">Total Amount Paid</span>
+        <span class="confirm-detail-val" style="font-size:1rem;font-weight:800;color:var(--navy);">$845.00</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">Payment Method</span>
+        <span class="confirm-detail-val">Visa •••• 4242</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">E-Ticket Number</span>
+        <span class="confirm-detail-val" style="font-family:monospace;">ET-FDA-2024-98234</span>
+      </div>
+      <div class="confirm-detail-row">
+        <span class="confirm-detail-key">Booking Status</span>
+        <span class="confirm-detail-val" style="color:var(--green);">✓ Confirmed</span>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button class="btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Download E-Ticket (PDF)
+      </button>
+      <button class="btn-outline">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Confirmation
+      </button>
+      <button class="btn-ghost">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Add to Calendar
+      </button>
+    </div>
+  </div>
+
+  <!-- What's Next -->
+  <div class="whats-next">
+    <h3>What's Next?</h3>
+    <div class="next-grid">
+      <div class="next-card">
+        <div class="next-icon">🍽️</div>
+        <div>
+          <div class="next-title">Choose Your Meals</div>
+          <div class="next-desc">Pre-select your in-flight meals and dietary preferences for a seamless dining experience.</div>
+        </div>
+      </div>
+      <div class="next-card">
+        <div class="next-icon">🛍️</div>
+        <div>
+          <div class="next-title">Pre-Order Duty-Free</div>
+          <div class="next-desc">Browse and pre-order exclusive duty-free items, delivered to your seat at 35,000 feet.</div>
+        </div>
+      </div>
+      <div class="next-card">
+        <div class="next-icon">📱</div>
+        <div>
+          <div class="next-title">Check-In Online</div>
+          <div class="next-desc">Online check-in opens 24 hours before departure. Select your seat and get your boarding pass.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer style="margin-top:4rem;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+          FlyDreamAir
+        </h3>
+      </div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+<!-- ═══════════════════════════════ PAGE 4 – MANAGE BOOKING ═════════════════════════ -->
+<div id="page4" class="page">
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-logo" onclick="showPage(1)">
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg>
+      FlyDreamAir
+    </div>
+    <ul class="nav-links">
+      <li><a onclick="showPage(1)">Home</a></li>
+      <li><a onclick="showPage(2)">Book a Flight</a></li>
+      <li><a class="active" onclick="showPage(4)">Manage Booking</a></li>
+      <li class="nav-has-dropdown">
+        <a class="nav-dropdown-trigger">In-Flight Services <span class="caret">▼</span></a>
+        <div class="nav-dropdown-panel">
+          <div class="dropdown-header">✈ What's on board</div>
+          <div class="dropdown-grid">
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,107,53,.12);">🍽️</div>
+              <div class="dropdown-item-text"><div class="dropdown-item-title">Meals & Dining</div><div class="dropdown-item-desc">Pre-order your in-flight meal from our chef-crafted menus</div></div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(255,193,7,.12);">🥂</div>
+              <div class="dropdown-item-text"><div class="dropdown-item-title">Food & Drinks</div><div class="dropdown-item-desc">Browse cocktails, wines, soft drinks & snacks available on board</div></div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(30,144,255,.12);">🎬</div>
+              <div class="dropdown-item-text"><div class="dropdown-item-title">Entertainment</div><div class="dropdown-item-desc">300+ movies, live TV, music & games on your personal screen</div></div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(16,185,129,.12);">📶</div>
+              <div class="dropdown-item-text"><div class="dropdown-item-title">WiFi & Connectivity</div><div class="dropdown-item-desc">High-speed internet plans from $9.99 — stay connected at 35,000 ft</div></div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(139,92,246,.12);">🛍️</div>
+              <div class="dropdown-item-text"><div class="dropdown-item-title">Duty Free Shopping</div><div class="dropdown-item-desc">Exclusive fragrances, luxury goods & gifts delivered to your seat</div></div>
+            </a>
+            <a class="dropdown-item">
+              <div class="dropdown-item-icon" style="background:rgba(245,184,0,.12);">💺</div>
+              <div class="dropdown-item-text"><div class="dropdown-item-title">Comfort & Amenities</div><div class="dropdown-item-desc">Pillows, blankets, noise-cancelling headsets & premium toiletry kits</div></div>
+            </a>
+          </div>
+          <div class="dropdown-promo">
+            <div class="dropdown-promo-text">✨ <span>New:</span> Pre-order meals up to 48 hrs before departure & save 15%</div>
+            <button class="dropdown-promo-btn">Order Now</button>
+          </div>
+        </div>
+      </li>
+    </ul>
+    <div class="nav-actions">
+      <button class="btn-login">Login</button>
+      <button class="btn-signup">Sign Up</button>
+    </div>
+  </nav>
+
+  <!-- Hero Banner -->
+  <div class="mb-hero">
+    <div style="position:relative;z-index:2;">
+      <div class="mb-hero-tag">✈ Booking Management</div>
+      <h1>Manage Your Booking</h1>
+      <p>View, change or cancel your reservation — anytime, anywhere</p>
+    </div>
+  </div>
+
+  <!-- Lookup Card -->
+  <div class="mb-lookup-wrap">
+    <div class="mb-lookup-card">
+      <div class="mb-lookup-title">
+        🔍 Find your booking
+      </div>
+      <div class="mb-lookup-grid">
+        <div class="mb-field">
+          <label>Booking Reference</label>
+          <input type="text" id="mb-ref" placeholder="e.g. FDA-7X9K2P" maxlength="12"
+            oninput="this.value = this.value.toUpperCase()" />
+        </div>
+        <div class="mb-field">
+          <label>Email Address</label>
+          <input type="email" id="mb-lastname" placeholder="e.g. john@email.com" />
+        </div>
+      </div>
+      <p class="mb-ref-hint">💡 Use the email address you provided when booking</p>
+      <button class="btn-find" onclick="findBooking()">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        Find My Booking
+      </button>
+      <div class="mb-divider">or</div>
+      <div style="display:flex;gap:.75rem;">
+        <button onclick="showPage(2)" style="flex:1;padding:.7rem;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:.85rem;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">
+          ✈ Book a new flight
+        </button>
+        <button style="flex:1;padding:.7rem;border-radius:10px;border:1.5px solid var(--border);background:var(--white);font-size:.85rem;font-weight:600;color:var(--text);cursor:pointer;transition:all .2s;" onmouseover="this.style.borderColor='var(--navy)'" onmouseout="this.style.borderColor='var(--border)'">
+          📧 Resend confirmation email
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result: Booking Found -->
+  <div class="mb-result" id="mb-result">
+    <div class="mb-booking-card">
+      <!-- Header -->
+      <div class="mb-booking-header">
+        <div class="mb-booking-ref">
+          <div class="mb-ref-label">Booking Reference</div>
+          <div class="mb-ref-code" id="mb-display-ref">FDA-7X9K2P</div>
+        </div>
+        <div style="text-align:right;">
+          <div class="mb-status-badge">
+            <div class="mb-status-dot"></div>
+            Confirmed
+          </div>
+          <div style="font-size:.72rem;color:rgba(255,255,255,.5);margin-top:.4rem;">E-Ticket: ET-FDA-2026-98234</div>
+        </div>
+      </div>
+      <!-- Route -->
+      <div class="mb-route-strip">
+        <div class="mb-airport">
+          <div class="mb-airport-code">SYD</div>
+          <div class="mb-airport-city">Sydney, Australia</div>
+          <div class="mb-airport-time">09:15 AM</div>
+        </div>
+        <div class="mb-connector">
+          <div class="mb-duration">14h 55m</div>
+          <div class="mb-flight-line"><div class="mb-fl"></div><div class="mb-plane-icon">✈</div><div class="mb-fl"></div></div>
+          <div class="mb-nonstop">Non-stop</div>
+        </div>
+        <div class="mb-airport" style="text-align:right;">
+          <div class="mb-airport-code">LHR</div>
+          <div class="mb-airport-city">London, United Kingdom</div>
+          <div class="mb-airport-time">05:10 AM+1</div>
+        </div>
+      </div>
+      <!-- Detail grid -->
+      <div class="mb-details-grid">
+        <div class="mb-detail">
+          <div class="mb-detail-label">Passenger</div>
+          <div class="mb-detail-value" id="mb-display-name">John Smith</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Flight</div>
+          <div class="mb-detail-value">FD 204</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Date</div>
+          <div class="mb-detail-value">12 Oct 2026</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Class / Seat</div>
+          <div class="mb-detail-value">Economy · 22A</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Check-in Opens</div>
+          <div class="mb-detail-value">11 Oct · 09:15 AM</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Gate Closes</div>
+          <div class="mb-detail-value">12 Oct · 08:45 AM</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Baggage</div>
+          <div class="mb-detail-value">1 × 23 kg</div>
+        </div>
+        <div class="mb-detail">
+          <div class="mb-detail-label">Total Paid</div>
+          <div class="mb-detail-value" style="color:var(--sky);">$845.00</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Cards -->
+    <div class="mb-actions-title">What would you like to do?</div>
+    <div class="mb-actions-grid">
+      <div class="mb-action-card">
+        <div class="mb-action-icon" style="background:rgba(30,144,255,.1);">✈</div>
+        <div class="mb-action-name">Change Flight</div>
+        <div class="mb-action-desc">Reschedule to a different date or route. Fare difference may apply.</div>
+        <div class="mb-action-arrow">Change →</div>
+      </div>
+      <div class="mb-action-card">
+        <div class="mb-action-icon" style="background:rgba(16,185,129,.1);">🪑</div>
+        <div class="mb-action-name">Select Seat</div>
+        <div class="mb-action-desc">Choose your preferred seat — window, aisle or extra legroom.</div>
+        <div class="mb-action-arrow">Select →</div>
+      </div>
+      <div class="mb-action-card">
+        <div class="mb-action-icon" style="background:rgba(255,107,53,.1);">🍽️</div>
+        <div class="mb-action-name">Pre-order Meals</div>
+        <div class="mb-action-desc">Pick your meal and drinks from the in-flight menu up to 48 hrs before.</div>
+        <div class="mb-action-arrow">Order →</div>
+      </div>
+      <div class="mb-action-card">
+        <div class="mb-action-icon" style="background:rgba(139,92,246,.1);">🧳</div>
+        <div class="mb-action-name">Add Baggage</div>
+        <div class="mb-action-desc">Purchase extra checked bags or increase your allowance online.</div>
+        <div class="mb-action-arrow">Add →</div>
+      </div>
+      <div class="mb-action-card">
+        <div class="mb-action-icon" style="background:rgba(245,184,0,.1);">📱</div>
+        <div class="mb-action-name">Online Check-in</div>
+        <div class="mb-action-desc">Check in opens 24 hours before departure. Get your boarding pass instantly.</div>
+        <div class="mb-action-arrow">Check in →</div>
+      </div>
+      <div class="mb-action-card" style="border-color:rgba(239,68,68,.15);">
+        <div class="mb-action-icon" style="background:rgba(239,68,68,.08);">❌</div>
+        <div class="mb-action-name" style="color:#ef4444;">Cancel Booking</div>
+        <div class="mb-action-desc">Cancel your reservation. Refund eligibility depends on your fare type.</div>
+        <div class="mb-action-arrow" style="color:#ef4444;">Cancel →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Result: Not Found -->
+  <div class="mb-not-found" id="mb-not-found">
+    <div class="mb-nf-icon">🔍</div>
+    <div class="mb-nf-title">Booking not found</div>
+    <div class="mb-nf-desc">We couldn't find a booking matching those details. Please double-check your reference number and last name, then try again.</div>
+    <button onclick="resetSearch()" style="margin-top:1.25rem;padding:.7rem 1.8rem;border-radius:10px;background:var(--sky);color:white;font-size:.875rem;font-weight:700;border:none;cursor:pointer;">Try Again</button>
+  </div>
+
+  <footer style="margin-top:4rem;">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <h3><svg width="18" height="18" viewBox="0 0 24 24" fill="#F5B800"><path d="M21 16v-2l-8-5V3.5c0-.83-.67-1.5-1.5-1.5S10 2.67 10 3.5V9l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5l8 2.5z"/></svg> FlyDreamAir</h3>
+      </div>
+      <div class="footer-col"><h4>About Us</h4></div>
+      <div class="footer-col"><h4>Privacy Policy</h4></div>
+      <div class="footer-col"><h4>Contact Us</h4><ul><li><a>Support</a></li></ul></div>
+    </div>
+    <div class="footer-bottom"><p>© 2026 FlyDreamAir. Effortless Ascension.</p></div>
+  </footer>
+</div>
+
+<script>
+  /* ─── PAGE NAVIGATION ─────────────────────────────────── */
+  function showPage(n) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page' + n).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  function setTab(el) {
+    el.closest('.trip-tabs').querySelectorAll('.trip-tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  /* ─── AIRPORT DATA ────────────────────────────────────── */
+  const AIRPORTS = [
+    // ── Oceania ──────────────────────────────────────────────────────────
+    { code:'SYD', city:'Sydney',           country:'Australia',      name:'Kingsford Smith Airport' },
+    { code:'MEL', city:'Melbourne',        country:'Australia',      name:'Melbourne Airport' },
+    { code:'BNE', city:'Brisbane',         country:'Australia',      name:'Brisbane Airport' },
+    { code:'PER', city:'Perth',            country:'Australia',      name:'Perth Airport' },
+    { code:'ADL', city:'Adelaide',         country:'Australia',      name:'Adelaide Airport' },
+    { code:'CBR', city:'Canberra',         country:'Australia',      name:'Canberra Airport' },
+    { code:'OOL', city:'Gold Coast',       country:'Australia',      name:'Gold Coast Airport' },
+    { code:'CNS', city:'Cairns',           country:'Australia',      name:'Cairns Airport' },
+    { code:'DRW', city:'Darwin',           country:'Australia',      name:'Darwin Airport' },
+    { code:'HBA', city:'Hobart',           country:'Australia',      name:'Hobart Airport' },
+    { code:'AKL', city:'Auckland',         country:'New Zealand',    name:'Auckland Airport' },
+    { code:'CHC', city:'Christchurch',     country:'New Zealand',    name:'Christchurch Airport' },
+    { code:'WLG', city:'Wellington',       country:'New Zealand',    name:'Wellington Airport' },
+    { code:'NAN', city:'Nadi',             country:'Fiji',           name:'Nadi Intl Airport' },
+    // ── North America ────────────────────────────────────────────────────
+    { code:'JFK', city:'New York',         country:'USA',            name:'John F. Kennedy Intl' },
+    { code:'EWR', city:'New York',         country:'USA',            name:'Newark Liberty Intl' },
+    { code:'LGA', city:'New York',         country:'USA',            name:'LaGuardia Airport' },
+    { code:'LAX', city:'Los Angeles',      country:'USA',            name:'Los Angeles Intl' },
+    { code:'ORD', city:'Chicago',          country:'USA',            name:"O'Hare Intl" },
+    { code:'MDW', city:'Chicago',          country:'USA',            name:'Midway Intl' },
+    { code:'SFO', city:'San Francisco',    country:'USA',            name:'San Francisco Intl' },
+    { code:'MIA', city:'Miami',            country:'USA',            name:'Miami Intl' },
+    { code:'DFW', city:'Dallas',           country:'USA',            name:'Dallas/Fort Worth Intl' },
+    { code:'SEA', city:'Seattle',          country:'USA',            name:'Seattle-Tacoma Intl' },
+    { code:'BOS', city:'Boston',           country:'USA',            name:'Logan Intl' },
+    { code:'LAS', city:'Las Vegas',        country:'USA',            name:'Harry Reid Intl' },
+    { code:'PHX', city:'Phoenix',          country:'USA',            name:'Phoenix Sky Harbor Intl' },
+    { code:'IAH', city:'Houston',          country:'USA',            name:'George Bush Intl' },
+    { code:'DEN', city:'Denver',           country:'USA',            name:'Denver Intl' },
+    { code:'ATL', city:'Atlanta',          country:'USA',            name:'Hartsfield-Jackson Intl' },
+    { code:'MSP', city:'Minneapolis',      country:'USA',            name:'Minneapolis-Saint Paul Intl' },
+    { code:'DTW', city:'Detroit',          country:'USA',            name:'Detroit Metropolitan Wayne County' },
+    { code:'PHL', city:'Philadelphia',     country:'USA',            name:'Philadelphia Intl' },
+    { code:'CLT', city:'Charlotte',        country:'USA',            name:'Charlotte Douglas Intl' },
+    { code:'IAD', city:'Washington DC',    country:'USA',            name:'Dulles Intl' },
+    { code:'DCA', city:'Washington DC',    country:'USA',            name:'Ronald Reagan Washington Natl' },
+    { code:'HNL', city:'Honolulu',         country:'USA',            name:'Daniel K. Inouye Intl' },
+    { code:'SAN', city:'San Diego',        country:'USA',            name:'San Diego Intl' },
+    { code:'TPA', city:'Tampa',            country:'USA',            name:'Tampa Intl' },
+    { code:'PDX', city:'Portland',         country:'USA',            name:'Portland Intl' },
+    { code:'STL', city:'St. Louis',        country:'USA',            name:'Lambert-St. Louis Intl' },
+    { code:'YYZ', city:'Toronto',          country:'Canada',         name:'Pearson Intl Airport' },
+    { code:'YVR', city:'Vancouver',        country:'Canada',         name:'Vancouver Intl Airport' },
+    { code:'YUL', city:'Montreal',         country:'Canada',         name:'Trudeau Intl Airport' },
+    { code:'YYC', city:'Calgary',          country:'Canada',         name:'Calgary Intl Airport' },
+    { code:'YEG', city:'Edmonton',         country:'Canada',         name:'Edmonton Intl Airport' },
+    { code:'YOW', city:'Ottawa',           country:'Canada',         name:'Ottawa Macdonald–Cartier Intl' },
+    { code:'MEX', city:'Mexico City',      country:'Mexico',         name:'Benito Juárez Intl' },
+    { code:'CUN', city:'Cancún',           country:'Mexico',         name:'Cancún Intl Airport' },
+    { code:'GDL', city:'Guadalajara',      country:'Mexico',         name:'Miguel Hidalgo y Costilla Intl' },
+    // ── South America ────────────────────────────────────────────────────
+    { code:'GRU', city:'São Paulo',        country:'Brazil',         name:'Guarulhos Intl' },
+    { code:'GIG', city:'Rio de Janeiro',   country:'Brazil',         name:'Galeão Intl Airport' },
+    { code:'BSB', city:'Brasília',         country:'Brazil',         name:'Presidente Juscelino Kubitschek Intl' },
+    { code:'EZE', city:'Buenos Aires',     country:'Argentina',      name:'Ministro Pistarini Intl' },
+    { code:'SCL', city:'Santiago',         country:'Chile',          name:'Comodoro Arturo Merino Benítez Intl' },
+    { code:'LIM', city:'Lima',             country:'Peru',           name:'Jorge Chávez Intl' },
+    { code:'BOG', city:'Bogotá',           country:'Colombia',       name:'El Dorado Intl' },
+    { code:'CCS', city:'Caracas',          country:'Venezuela',      name:'Simón Bolívar Intl' },
+    { code:'UIO', city:'Quito',            country:'Ecuador',        name:'Mariscal Sucre Intl' },
+    { code:'MVD', city:'Montevideo',       country:'Uruguay',        name:'Carrasco Intl' },
+    // ── UK & Ireland ─────────────────────────────────────────────────────
+    { code:'LHR', city:'London',           country:'UK',             name:'Heathrow Airport' },
+    { code:'LGW', city:'London',           country:'UK',             name:'Gatwick Airport' },
+    { code:'STN', city:'London',           country:'UK',             name:'Stansted Airport' },
+    { code:'LTN', city:'London',           country:'UK',             name:'Luton Airport' },
+    { code:'MAN', city:'Manchester',       country:'UK',             name:'Manchester Airport' },
+    { code:'BHX', city:'Birmingham',       country:'UK',             name:'Birmingham Airport' },
+    { code:'EDI', city:'Edinburgh',        country:'UK',             name:'Edinburgh Airport' },
+    { code:'GLA', city:'Glasgow',          country:'UK',             name:'Glasgow Airport' },
+    { code:'DUB', city:'Dublin',           country:'Ireland',        name:'Dublin Airport' },
+    // ── Western Europe ───────────────────────────────────────────────────
+    { code:'CDG', city:'Paris',            country:'France',         name:'Charles de Gaulle' },
+    { code:'ORY', city:'Paris',            country:'France',         name:'Orly Airport' },
+    { code:'NCE', city:'Nice',             country:'France',         name:'Côte d\'Azur Airport' },
+    { code:'LYS', city:'Lyon',             country:'France',         name:'Saint-Exupéry Airport' },
+    { code:'AMS', city:'Amsterdam',        country:'Netherlands',    name:'Amsterdam Schiphol' },
+    { code:'FRA', city:'Frankfurt',        country:'Germany',        name:'Frankfurt Airport' },
+    { code:'MUC', city:'Munich',           country:'Germany',        name:'Munich Airport' },
+    { code:'BER', city:'Berlin',           country:'Germany',        name:'Berlin Brandenburg Airport' },
+    { code:'HAM', city:'Hamburg',          country:'Germany',        name:'Hamburg Airport' },
+    { code:'DUS', city:'Düsseldorf',       country:'Germany',        name:'Düsseldorf Airport' },
+    { code:'MAD', city:'Madrid',           country:'Spain',          name:'Adolfo Suárez Barajas' },
+    { code:'BCN', city:'Barcelona',        country:'Spain',          name:'El Prat Airport' },
+    { code:'AGP', city:'Malaga',           country:'Spain',          name:'Málaga-Costa del Sol Airport' },
+    { code:'PMI', city:'Palma de Mallorca',country:'Spain',          name:'Son Sant Joan Airport' },
+    { code:'FCO', city:'Rome',             country:'Italy',          name:'Fiumicino Airport' },
+    { code:'MXP', city:'Milan',            country:'Italy',          name:'Malpensa Airport' },
+    { code:'VCE', city:'Venice',           country:'Italy',          name:'Marco Polo Airport' },
+    { code:'NAP', city:'Naples',           country:'Italy',          name:'Naples Capodichino Airport' },
+    { code:'ZRH', city:'Zurich',           country:'Switzerland',    name:'Zurich Airport' },
+    { code:'GVA', city:'Geneva',           country:'Switzerland',    name:'Geneva Airport' },
+    { code:'VIE', city:'Vienna',           country:'Austria',        name:'Vienna Intl Airport' },
+    { code:'BRU', city:'Brussels',         country:'Belgium',        name:'Brussels Airport' },
+    { code:'LIS', city:'Lisbon',           country:'Portugal',       name:'Humberto Delgado Airport' },
+    { code:'OPO', city:'Porto',            country:'Portugal',       name:'Francisco Sá Carneiro Airport' },
+    { code:'ATH', city:'Athens',           country:'Greece',         name:'Eleftherios Venizelos Intl' },
+    { code:'SKG', city:'Thessaloniki',     country:'Greece',         name:'Makedonia Airport' },
+    { code:'CPH', city:'Copenhagen',       country:'Denmark',        name:'Copenhagen Airport' },
+    { code:'ARN', city:'Stockholm',        country:'Sweden',         name:'Arlanda Airport' },
+    { code:'OSL', city:'Oslo',             country:'Norway',         name:'Oslo Gardermoen Airport' },
+    { code:'HEL', city:'Helsinki',         country:'Finland',        name:'Helsinki-Vantaa Airport' },
+    { code:'WAW', city:'Warsaw',           country:'Poland',         name:'Chopin Airport' },
+    { code:'PRG', city:'Prague',           country:'Czech Republic', name:'Václav Havel Airport' },
+    { code:'BUD', city:'Budapest',         country:'Hungary',        name:'Budapest Liszt Ferenc Intl' },
+    { code:'OTP', city:'Bucharest',        country:'Romania',        name:'Henri Coandă Intl' },
+    { code:'SOF', city:'Sofia',            country:'Bulgaria',       name:'Sofia Airport' },
+    { code:'IST', city:'Istanbul',         country:'Türkiye',        name:'Istanbul Airport' },
+    { code:'SAW', city:'Istanbul',         country:'Türkiye',        name:'Sabiha Gökçen Intl' },
+    { code:'ESB', city:'Ankara',           country:'Türkiye',        name:'Esenboğa Intl' },
+    { code:'AYT', city:'Antalya',          country:'Türkiye',        name:'Antalya Airport' },
+    // ── Middle East ──────────────────────────────────────────────────────
+    { code:'DXB', city:'Dubai',            country:'UAE',            name:'Dubai Intl Airport' },
+    { code:'DWC', city:'Dubai',            country:'UAE',            name:'Al Maktoum Intl Airport' },
+    { code:'AUH', city:'Abu Dhabi',        country:'UAE',            name:'Abu Dhabi Intl' },
+    { code:'SHJ', city:'Sharjah',          country:'UAE',            name:'Sharjah Intl Airport' },
+    { code:'DOH', city:'Doha',             country:'Qatar',          name:'Hamad Intl Airport' },
+    { code:'RUH', city:'Riyadh',           country:'Saudi Arabia',   name:'King Khalid Intl' },
+    { code:'JED', city:'Jeddah',           country:'Saudi Arabia',   name:'King Abdulaziz Intl' },
+    { code:'BAH', city:'Manama',           country:'Bahrain',        name:'Bahrain Intl Airport' },
+    { code:'MCT', city:'Muscat',           country:'Oman',           name:'Muscat Intl Airport' },
+    { code:'KWI', city:'Kuwait City',      country:'Kuwait',         name:'Kuwait Intl Airport' },
+    { code:'AMM', city:'Amman',            country:'Jordan',         name:'Queen Alia Intl Airport' },
+    { code:'BEY', city:'Beirut',           country:'Lebanon',        name:'Rafic Hariri Intl Airport' },
+    { code:'TLV', city:'Tel Aviv',         country:'Israel',         name:'Ben Gurion Intl Airport' },
+    // ── Africa ───────────────────────────────────────────────────────────
+    { code:'JNB', city:'Johannesburg',     country:'South Africa',   name:'O.R. Tambo Intl' },
+    { code:'CPT', city:'Cape Town',        country:'South Africa',   name:'Cape Town Intl Airport' },
+    { code:'DUR', city:'Durban',           country:'South Africa',   name:'King Shaka Intl Airport' },
+    { code:'CAI', city:'Cairo',            country:'Egypt',          name:'Cairo Intl Airport' },
+    { code:'HRG', city:'Hurghada',         country:'Egypt',          name:'Hurghada Intl Airport' },
+    { code:'SSH', city:'Sharm el-Sheikh',  country:'Egypt',          name:'Sharm el-Sheikh Intl Airport' },
+    { code:'CMN', city:'Casablanca',       country:'Morocco',        name:'Mohammed V Intl Airport' },
+    { code:'RAK', city:'Marrakech',        country:'Morocco',        name:'Marrakech Menara Airport' },
+    { code:'ALG', city:'Algiers',          country:'Algeria',        name:'Houari Boumediene Airport' },
+    { code:'TUN', city:'Tunis',            country:'Tunisia',        name:'Tunis-Carthage Intl Airport' },
+    { code:'NBO', city:'Nairobi',          country:'Kenya',          name:'Jomo Kenyatta Intl' },
+    { code:'MBA', city:'Mombasa',          country:'Kenya',          name:'Moi Intl Airport' },
+    { code:'ADD', city:'Addis Ababa',      country:'Ethiopia',       name:'Bole Intl Airport' },
+    { code:'DAR', city:'Dar es Salaam',    country:'Tanzania',       name:'Julius Nyerere Intl Airport' },
+    { code:'LOS', city:'Lagos',            country:'Nigeria',        name:'Murtala Muhammed Intl Airport' },
+    { code:'ABV', city:'Abuja',            country:'Nigeria',        name:'Nnamdi Azikiwe Intl Airport' },
+    { code:'ACC', city:'Accra',            country:'Ghana',          name:'Kotoka Intl Airport' },
+    // ── South Asia ───────────────────────────────────────────────────────
+    { code:'BOM', city:'Mumbai',           country:'India',          name:'Chhatrapati Shivaji Maharaj Intl' },
+    { code:'DEL', city:'New Delhi',        country:'India',          name:'Indira Gandhi Intl' },
+    { code:'BLR', city:'Bangalore',        country:'India',          name:'Kempegowda Intl Airport' },
+    { code:'MAA', city:'Chennai',          country:'India',          name:'Chennai Intl Airport' },
+    { code:'HYD', city:'Hyderabad',        country:'India',          name:'Rajiv Gandhi Intl Airport' },
+    { code:'CCU', city:'Kolkata',          country:'India',          name:'Netaji Subhas Chandra Bose Intl' },
+    { code:'COK', city:'Kochi',            country:'India',          name:'Cochin Intl Airport' },
+    { code:'KTM', city:'Kathmandu',        country:'Nepal',          name:'Tribhuvan Intl Airport' },
+    { code:'CMB', city:'Colombo',          country:'Sri Lanka',      name:'Bandaranaike Intl Airport' },
+    { code:'DAC', city:'Dhaka',            country:'Bangladesh',     name:'Hazrat Shahjalal Intl Airport' },
+    { code:'KHI', city:'Karachi',          country:'Pakistan',       name:'Jinnah Intl Airport' },
+    { code:'ISB', city:'Islamabad',        country:'Pakistan',       name:'New Islamabad Intl Airport' },
+    { code:'LHE', city:'Lahore',           country:'Pakistan',       name:'Allama Iqbal Intl Airport' },
+    // ── East & SE Asia ───────────────────────────────────────────────────
+    { code:'NRT', city:'Tokyo',            country:'Japan',          name:'Narita Intl Airport' },
+    { code:'HND', city:'Tokyo',            country:'Japan',          name:'Haneda Airport' },
+    { code:'KIX', city:'Osaka',            country:'Japan',          name:'Kansai Intl Airport' },
+    { code:'ITM', city:'Osaka',            country:'Japan',          name:'Itami Airport' },
+    { code:'NGO', city:'Nagoya',           country:'Japan',          name:'Chubu Centrair Intl Airport' },
+    { code:'CTS', city:'Sapporo',          country:'Japan',          name:'New Chitose Airport' },
+    { code:'FUK', city:'Fukuoka',          country:'Japan',          name:'Fukuoka Airport' },
+    { code:'OKA', city:'Okinawa',          country:'Japan',          name:'Naha Airport' },
+    { code:'HKG', city:'Hong Kong',        country:'Hong Kong',      name:'Hong Kong Intl' },
+    { code:'TPE', city:'Taipei',           country:'Taiwan',         name:'Taoyuan Intl Airport' },
+    { code:'TSA', city:'Taipei',           country:'Taiwan',         name:'Songshan Airport' },
+    { code:'ICN', city:'Seoul',            country:'South Korea',    name:'Incheon Intl Airport' },
+    { code:'GMP', city:'Seoul',            country:'South Korea',    name:'Gimpo Intl Airport' },
+    { code:'PUS', city:'Busan',            country:'South Korea',    name:'Gimhae Intl Airport' },
+    { code:'PVG', city:'Shanghai',         country:'China',          name:'Pudong Intl Airport' },
+    { code:'SHA', city:'Shanghai',         country:'China',          name:'Hongqiao Intl Airport' },
+    { code:'PEK', city:'Beijing',          country:'China',          name:'Capital Intl Airport' },
+    { code:'PKX', city:'Beijing',          country:'China',          name:'Daxing Intl Airport' },
+    { code:'CAN', city:'Guangzhou',        country:'China',          name:'Baiyun Intl Airport' },
+    { code:'SZX', city:'Shenzhen',         country:'China',          name:'Bao\'an Intl Airport' },
+    { code:'CTU', city:'Chengdu',          country:'China',          name:'Tianfu Intl Airport' },
+    { code:'KMG', city:'Kunming',          country:'China',          name:'Changshui Intl Airport' },
+    { code:'XMN', city:'Xiamen',           country:'China',          name:'Gaoqi Intl Airport' },
+    { code:'HKT', city:'Phuket',           country:'Thailand',       name:'Phuket Intl Airport' },
+    { code:'BKK', city:'Bangkok',          country:'Thailand',       name:'Suvarnabhumi Airport' },
+    { code:'DMK', city:'Bangkok',          country:'Thailand',       name:'Don Mueang Intl Airport' },
+    { code:'CNX', city:'Chiang Mai',       country:'Thailand',       name:'Chiang Mai Intl Airport' },
+    { code:'SIN', city:'Singapore',        country:'Singapore',      name:'Changi Airport' },
+    { code:'KUL', city:'Kuala Lumpur',     country:'Malaysia',       name:'KLIA Airport' },
+    { code:'PEN', city:'Penang',           country:'Malaysia',       name:'Penang Intl Airport' },
+    { code:'CGK', city:'Jakarta',          country:'Indonesia',      name:'Soekarno-Hatta Intl' },
+    { code:'DPS', city:'Bali',             country:'Indonesia',      name:'Ngurah Rai Intl Airport' },
+    { code:'SUB', city:'Surabaya',         country:'Indonesia',      name:'Juanda Intl Airport' },
+    { code:'MNL', city:'Manila',           country:'Philippines',    name:'Ninoy Aquino Intl Airport' },
+    { code:'CEB', city:'Cebu',             country:'Philippines',    name:'Mactan–Cebu Intl Airport' },
+    { code:'SGN', city:'Ho Chi Minh City', country:'Vietnam',        name:'Tan Son Nhat Intl Airport' },
+    { code:'HAN', city:'Hanoi',            country:'Vietnam',        name:'Noi Bai Intl Airport' },
+    { code:'DAD', city:'Da Nang',          country:'Vietnam',        name:'Da Nang Intl Airport' },
+    { code:'RGN', city:'Yangon',           country:'Myanmar',        name:'Yangon Intl Airport' },
+    { code:'PNH', city:'Phnom Penh',       country:'Cambodia',       name:'Phnom Penh Intl Airport' },
+    { code:'REP', city:'Siem Reap',        country:'Cambodia',       name:'Siem Reap–Angkor Intl Airport' },
+    { code:'VTE', city:'Vientiane',        country:'Laos',           name:'Wattay Intl Airport' },
+    { code:'ULN', city:'Ulaanbaatar',      country:'Mongolia',       name:'Chinggis Khaan Intl Airport' },
+    // ── Central Asia & Russia ────────────────────────────────────────────
+    { code:'SVO', city:'Moscow',           country:'Russia',         name:'Sheremetyevo Intl Airport' },
+    { code:'DME', city:'Moscow',           country:'Russia',         name:'Domodedovo Intl Airport' },
+    { code:'LED', city:'Saint Petersburg', country:'Russia',         name:'Pulkovo Airport' },
+    { code:'ALA', city:'Almaty',           country:'Kazakhstan',     name:'Almaty Intl Airport' },
+    { code:'TAS', city:'Tashkent',         country:'Uzbekistan',     name:'Islam Karimov Intl Airport' },
+    { code:'TBS', city:'Tbilisi',          country:'Georgia',        name:'Shota Rustaveli Intl Airport' },
+    { code:'EVN', city:'Yerevan',          country:'Armenia',        name:'Zvartnots Intl Airport' },
+    { code:'GYD', city:'Baku',             country:'Azerbaijan',     name:'Heydar Aliyev Intl Airport' },
+    { code:'IKA', city:'Tehran',           country:'Iran',           name:'Imam Khomeini Intl Airport' },
+  ];
+
+  /* ─── AIRPORT DROPDOWN ────────────────────────────────── */
+  function buildDropdownHTML(results) {
+    if (!results.length) return '<div style="padding:.75rem 1rem;color:var(--muted);font-size:.825rem;">No airports found</div>';
+    return results.map(a => `
+      <div class="airport-option" tabindex="0"
+        onmousedown="pickAirport(event, this)"
+        data-value="${a.city} (${a.code})">
+        <div class="apt-row">
+          <span class="apt-iata">${a.code}</span>
+          <span class="apt-city">${a.city}, ${a.country}</span>
+        </div>
+        <div class="apt-name">${a.name}</div>
+      </div>`).join('');
+  }
+
+  function positionBelow(anchor, panel) {
+    const r = anchor.getBoundingClientRect();
+    panel.style.top  = (r.bottom + 6) + 'px';
+    panel.style.left = r.left + 'px';
+    panel.style.width = Math.max(r.width, 260) + 'px';
+  }
+
+  function openAirportDrop(dropId, input) {
+    // close the other dropdown first
+    ['from-drop','to-drop'].forEach(id => {
+      if (id !== dropId) document.getElementById(id).classList.remove('open');
+    });
+    const q = input.value.trim().toLowerCase();
+    const results = q.length === 0 ? AIRPORTS.slice(0, 8)
+      : AIRPORTS.filter(a =>
+          a.code.toLowerCase().startsWith(q) ||
+          a.city.toLowerCase().startsWith(q) ||
+          a.country.toLowerCase().startsWith(q) ||
+          a.name.toLowerCase().includes(q)
+        ).slice(0, 8);
+    const drop = document.getElementById(dropId);
+    drop.innerHTML = buildDropdownHTML(results);
+    positionBelow(input, drop);
+    drop.classList.add('open');
+  }
+
+  function filterAirports(input, dropId) {
+    openAirportDrop(dropId, input);
+  }
+
+  function pickAirport(e, el) {
+    e.preventDefault();
+    const drop = el.closest('.airport-dropdown');
+    const input = drop.previousElementSibling;
+    input.value = el.dataset.value;
+    drop.classList.remove('open');
+  }
+
+  function swapCities() {
+    const f = document.getElementById('from-input');
+    const t = document.getElementById('to-input');
+    [f.value, t.value] = [t.value, f.value];
+  }
+
+  /* ─── PASSENGERS & CLASS ──────────────────────────────── */
+  const pax = { adults: 1, children: 0, infants: 0, cls: 'Economy' };
+
+  function togglePaxPanel(e) {
+    const panel = document.getElementById('pax-panel');
+    const field = document.querySelector('.pax-field');
+    if (!panel.classList.contains('open')) {
+      // position before showing
+      const r = field.getBoundingClientRect();
+      panel.style.top  = (r.bottom + 6) + 'px';
+      // align right edge of panel with right edge of field
+      panel.style.left = (r.right - 290) + 'px';
+    }
+    panel.classList.toggle('open');
+  }
+  function closePaxPanel() {
+    document.getElementById('pax-panel').classList.remove('open');
+  }
+  function changePax(type, delta) {
+    const min = type === 'adults' ? 1 : 0;
+    pax[type] = Math.max(min, Math.min(9, pax[type] + delta));
+    refreshPax();
+  }
+  function selectClass(btn, cls) {
+    document.querySelectorAll('.class-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    pax.cls = cls;
+    refreshPax();
+  }
+  function refreshPax() {
+    document.getElementById('adults-count').textContent   = pax.adults;
+    document.getElementById('children-count').textContent = pax.children;
+    document.getElementById('infants-count').textContent  = pax.infants;
+    document.getElementById('adults-minus').disabled   = pax.adults   <= 1;
+    document.getElementById('children-minus').disabled = pax.children <= 0;
+    document.getElementById('infants-minus').disabled  = pax.infants  <= 0;
+    let parts = [pax.adults + (pax.adults === 1 ? ' Adult' : ' Adults')];
+    if (pax.children) parts.push(pax.children + (pax.children === 1 ? ' Child' : ' Children'));
+    if (pax.infants)  parts.push(pax.infants  + (pax.infants  === 1 ? ' Infant' : ' Infants'));
+    document.getElementById('pax-display').textContent = parts.join(', ') + ', ' + pax.cls;
+  }
+
+  /* ─── CLOSE DROPDOWNS ON OUTSIDE CLICK ───────────────── */
+  document.addEventListener('click', function(e) {
+    // Close airport dropdowns
+    ['from-drop','to-drop'].forEach(id => {
+      const drop = document.getElementById(id);
+      if (!drop) return;
+      const input = drop.id === 'from-drop'
+        ? document.getElementById('from-input')
+        : document.getElementById('to-input');
+      if (drop.classList.contains('open') &&
+          !drop.contains(e.target) && e.target !== input) {
+        drop.classList.remove('open');
+      }
+    });
+    // Close pax panel
+    const paxPanel = document.getElementById('pax-panel');
+    if (paxPanel && paxPanel.classList.contains('open')) {
+      const paxField = document.querySelector('.pax-field');
+      if (!paxField.contains(e.target) && !paxPanel.contains(e.target)) {
+        closePaxPanel();
+      }
+    }
+  });
+
+  /* ─── CLOSE ON SCROLL (fixed panels would drift otherwise) */
+  window.addEventListener('scroll', function() {
+    ['from-drop','to-drop'].forEach(id => {
+      const d = document.getElementById(id);
+      if (d) d.classList.remove('open');
+    });
+    closePaxPanel();
+  }, { passive: true });
+
+  /* ─── MANAGE BOOKING ──────────────────────────────────── */
+  const DEMO_BOOKINGS = [
+    { ref:'FDA-7X9K2P', email:'john@email.com',   name:'John Smith' },
+    { ref:'FDA-4B2MNX', email:'an@email.com',      name:'An Nguyen' },
+    { ref:'FDA-9QR1TP', email:'emma@email.com',    name:'Emma Johnson' },
+  ];
+
+  function findBooking() {
+    const ref   = document.getElementById('mb-ref').value.trim().toUpperCase();
+    const email = document.getElementById('mb-lastname').value.trim().toLowerCase();
+    document.getElementById('mb-result').classList.remove('visible');
+    document.getElementById('mb-not-found').classList.remove('visible');
+    const refEl   = document.getElementById('mb-ref');
+    const emailEl = document.getElementById('mb-lastname');
+    const emailValid = email && email.includes('@');
+    refEl.style.borderColor   = ref        ? '' : '#ef4444';
+    emailEl.style.borderColor = emailValid ? '' : '#ef4444';
+    if (!ref || !emailValid) return;
+    refEl.style.borderColor = emailEl.style.borderColor = '';
+
+    const btn = document.querySelector('.btn-find');
+    btn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="6" cy="6" r="4"/></svg> Searching…';
+    btn.disabled = true;
+
+    setTimeout(() => {
+      btn.innerHTML = '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Find My Booking';
+      btn.disabled = false;
+
+      const match = DEMO_BOOKINGS.find(b => b.ref === ref && b.email === email)
+        || (ref.length >= 3 && emailValid
+            ? { ref, name: email.split('@')[0] }
+            : null);
+
+      if (match) {
+        document.getElementById('mb-display-ref').textContent  = match.ref;
+        document.getElementById('mb-display-name').textContent = match.name;
+        document.getElementById('mb-result').classList.add('visible');
+        document.getElementById('mb-result').scrollIntoView({ behavior:'smooth', block:'start' });
+      } else {
+        document.getElementById('mb-not-found').classList.add('visible');
+        document.getElementById('mb-not-found').scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+    }, 900);
+  }
+
+  function resetSearch() {
+    document.getElementById('mb-ref').value = '';
+    document.getElementById('mb-lastname').value = '';
+    document.getElementById('mb-result').classList.remove('visible');
+    document.getElementById('mb-not-found').classList.remove('visible');
+    document.querySelector('.mb-lookup-card').scrollIntoView({ behavior:'smooth' });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    ['mb-ref','mb-lastname'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('keydown', e => { if (e.key === 'Enter') findBooking(); });
+    });
+  });
+
+  // Enforce departure <= return date
+  document.addEventListener('DOMContentLoaded', function() {
+    refreshPax();
+    const dep = document.getElementById('departure-date');
+    const ret = document.getElementById('return-date');
+    if (dep && ret) {
+      dep.addEventListener('change', function() {
+        if (ret.value && ret.value < dep.value) ret.value = dep.value;
+        ret.min = dep.value;
+      });
+    }
+  });
+</script>
+</body>
+</html>
